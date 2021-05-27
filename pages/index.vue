@@ -1,6 +1,7 @@
 <template>
   <v-row justify="center" align="center">
     <v-col cols="12" sm="8" md="6">
+      <articles/>
       <div class="text-center">
         <logo />
         <vuetify-logo />
@@ -76,14 +77,23 @@
   </v-row>
 </template>
 
-<script>
+<script lang="ts">
 import Logo from '~/components/Logo.vue'
 import VuetifyLogo from '~/components/VuetifyLogo.vue'
+import Article from '@/types/Article'
+import { Component, Vue } from 'nuxt-property-decorator'
 
-export default {
+@Component({
   components: {
-    Logo,
-    VuetifyLogo
+    Logo, VuetifyLogo
+  }
+})
+export default class MainPage extends Vue{
+  get articles(): Array<Article>{
+    return this.$store.state.articles
+  }
+  async fetch(){
+    await this.$store.dispatch('articles/getArticles')
   }
 }
 </script>
