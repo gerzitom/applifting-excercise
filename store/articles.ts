@@ -18,10 +18,7 @@ export default class Articles extends VuexModule {
   @Action({
     rawError: true,
   })
-  async getArticles() {
-    const apiKey = this.context.rootState.user.user.apiKey
-    console.log(apiKey)
-
+  async getArticles(): Promise<Article[]> {
     interface Response {
       pagination: {
         offset: number
@@ -30,18 +27,8 @@ export default class Articles extends VuexModule {
       }
       items: Article[]
     }
-
-    const config = {
-      headers: {
-        'X-API-KEY': apiKey,
-      },
-    }
-    const response = await $axios.get<Response>('/articles', config)
-    console.log(response)
+    const response = await $axios.get<Response>('/articles')
     const articles = response.data.items
-    // const articles = [
-    //   new Article('23', 'ASDA', 'ASDAS', 'ASDAS', 'ASDAS', 'ASDASd'),
-    // ]
     this.context.commit('setArticles', articles)
     return articles
   }

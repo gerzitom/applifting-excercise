@@ -17,8 +17,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['plugins/axios-accessor'],
-
+  plugins: ['plugins/axios-accessor', 'plugins/axios'],
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
@@ -36,6 +35,8 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+
+    '@nuxtjs/auth-next',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -71,4 +72,42 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  // router: {
+  //   middleware: ['auth'],
+  // },
+
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          property: 'access_token',
+          required: true,
+          // type: 'Bearer'
+        },
+        user: {
+          property: '',
+          // autoFetch: false,
+        },
+        endpoints: {
+          login: {
+            url: '/login',
+            method: 'post',
+            // propertyName: 'access_token',
+          },
+          logout: { url: '/logout', method: 'post' },
+          user: {
+            url: '/tenants/23a10b02-7fcd-460a-995f-936e95edadea',
+            method: 'get',
+          },
+        },
+      },
+    },
+    redirect: {
+      login: '/login',
+      home: '/admin',
+      logout: '/logout',
+    },
+    vuex: false,
+  },
 }
