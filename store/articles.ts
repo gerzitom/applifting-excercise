@@ -8,7 +8,7 @@ import Article from '~/types/Article'
   namespaced: true,
 })
 export default class Articles extends VuexModule {
-  public articles: Article[] = []
+  public articles: Array<Article> = []
 
   @Mutation
   setArticles(users: Article[]) {
