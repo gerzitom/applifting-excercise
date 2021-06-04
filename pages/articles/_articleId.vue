@@ -43,6 +43,12 @@
         <v-skeleton-loader type="paragraph@4"></v-skeleton-loader>
       </template>
     </section>
+    <section v-if="!loading">
+      <article-comments
+        :comments="articleData.comments"
+        :article-id="$route.params.articleId"
+      ></article-comments>
+    </section>
   </div>
 </template>
 
@@ -50,10 +56,12 @@
 import ArticleDetail from '@/types/ArticleDetail'
 import { Component, Vue } from 'nuxt-property-decorator'
 import ArticleImage from '~/components/ArticleImage.vue'
+import ArticleComments from '~/components/ArticleComments.vue'
 
 @Component({
   components: {
     ArticleImage,
+    ArticleComments,
   },
 })
 export default class SingleArticle extends Vue {

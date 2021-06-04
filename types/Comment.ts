@@ -1,21 +1,24 @@
-export default class Article {
+export default class Comment {
   articleId: string
   author: string
   commentId: string
-  postedAt: string
+  createdAt: string
   score: number
+  content: string
 
   constructor(
     articleId: string,
     author: string,
     commentId: string,
-    postedAt: string,
-    score: number
+    createdAt: string,
+    score: number,
+    content: string
   ) {
     this.articleId = articleId
     this.author = author
     this.commentId = commentId
-    this.postedAt = postedAt
+    this.createdAt = createdAt
     this.score = score
+    this.content = content
   }
 }

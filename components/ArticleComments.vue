@@ -1,0 +1,69 @@
+<template>
+  <div class="comments">
+    <h3 class="text-h4">Comments ({{ comments.length }})</h3>
+    <div class="add-comment mt-3" v-if="$auth.loggedIn">
+      <v-row align="center">
+        <v-col cols="1">
+          <user-avatar></user-avatar>
+        </v-col>
+        <v-col>
+          <div class="d-flex align-center">
+            <v-text-field
+              placeholder="Join the discusion"
+              v-model="newComment"
+            ></v-text-field>
+            <v-btn class="ml-5" :loading="loading" @click="addComment"
+              >Send</v-btn
+            >
+          </div>
+        </v-col>
+      </v-row>
+    </div>
+    <article-comment
+      v-for="comment in sortedComments"
+      :key="comment.commentId"
+      :comment="comment"
+    ></article-comment>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import Comment from '../types/Comment'
+import ArticleComment from '~/components/ArticleComment.vue'
+import UserAvatar from '~/components/UserAvatar.vue'
+import NewCommentDto from '~/types/NewCommentDto'
+
+@Component({
+  components: {
+    ArticleComment,
+    UserAvatar,
+  },
+})
+export default class ArticleCommnets extends Vue {
+  @Prop() comments!: Comment[]
+  @Prop() articleId!: string
+  private newComment: string = ''
+  private loading = false
+  get sortedComments(): Comment[] {
+    return [...this.comments].sort((a, b) => {
+      const createdA = this.$moment(a.createdAt)
+      const createdB = this.$moment(b.createdAt)
+      return createdB.valueOf() - createdA.valueOf()
+    })
+  }
+  public addComment() {
+    this.loading = true
+    const dto = new NewCommentDto(
+      this.articleId,
+      this.$auth.user.name,
+      this.newComment
+    )
+    this.$store.dispatch('articles/addComment', dto).then((response) => {
+      this.loading = false
+    })
+  }
+}
+</script>
+
+<style scoped></style>

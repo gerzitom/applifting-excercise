@@ -3,6 +3,8 @@ import { $axios } from '~/utils/api'
 import Article from '~/types/Article'
 import ArticleDetail from '~/types/ArticleDetail'
 import { store } from '@/store'
+import NewCommentDto from '~/types/NewCommentDto'
+import Comment from '~/types/Comment'
 
 @Module({
   name: 'articles',
@@ -80,6 +82,35 @@ export default class Articles extends VuexModule {
         .catch((err) => {
           reject(err)
         })
+    })
+  }
+
+  @Action({
+    rawError: true,
+  })
+  public addComment(dto: NewCommentDto): Promise<Comment> {
+    return new Promise<Comment>((resolve, reject) => {
+      $axios
+        .post<Comment>('/comments', dto)
+        .then((response) => {
+          const newComment = response.data as Comment
+          newComment.articleId = dto.articleId
+          // newComment.postedAt = response.data.
+          this.context.commit('addCommentMutation', newComment)
+          resolve(newComment)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  }
+
+  @Mutation
+  private addCommentMutation(newComment: Comment) {
+    this.articleDetails.forEach((article) => {
+      if (article.articleId === newComment.articleId) {
+        article.comments.push(newComment)
+      }
     })
   }
 }
