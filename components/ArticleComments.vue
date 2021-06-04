@@ -23,6 +23,7 @@
       v-for="comment in sortedComments"
       :key="comment.commentId"
       :comment="comment"
+      :article-id="articleId"
     ></article-comment>
   </div>
 </template>

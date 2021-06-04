@@ -6,19 +6,22 @@
       </v-col>
       <v-col>
         <v-col>
-          <p>{{ comment.author }}</p>
-          <p>{{ comment.content }}</p>
-          <v-row>
-            <v-col cols="auto">
-              <span>{{ comment.score }}</span>
-            </v-col>
-            <v-col cols="auto">
-              <v-btn icon><v-icon>mdi-chevron-up</v-icon></v-btn>
-            </v-col>
-            <v-col cols="auto">
-              <v-btn icon><v-icon>mdi-chevron-down</v-icon></v-btn>
-            </v-col>
-          </v-row>
+          <div class="d-flex align-center">
+            <p class="font-weight-bold text-body-1">{{ comment.author }}</p>
+            <p class="ml-3 text-caption">{{ comment.commentId }}</p>
+          </div>
+          <p class="text-body-2">{{ comment.content }}</p>
+          <div class="d-flex align-center">
+            <span class="d-block">{{ comment.score }}</span>
+            <v-divider vertical class="mx-3" />
+            <v-btn icon @click="upvoteComment"
+              ><v-icon>mdi-chevron-up</v-icon></v-btn
+            >
+            <v-divider vertical class="mx-3" />
+            <v-btn icon @click="downvoteComment"
+              ><v-icon>mdi-chevron-down</v-icon></v-btn
+            >
+          </div>
         </v-col>
       </v-col>
     </v-row>
@@ -29,6 +32,7 @@
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import Comment from '@/types/Comment'
 import UserAvatar from '~/components/UserAvatar.vue'
+import { VoteDetails, VoteValue } from '~/store/articles'
 
 @Component({
   components: {
@@ -37,6 +41,24 @@ import UserAvatar from '~/components/UserAvatar.vue'
 })
 export default class ArticleComment extends Vue {
   @Prop() comment!: Comment
+  @Prop() articleId!: number
+  public upvoteComment() {
+    const details = new VoteDetails(
+      this.comment.commentId,
+      this.articleId,
+      VoteValue.UP
+    )
+    this.$store.dispatch('articles/voteComment', details)
+  }
+
+  public downvoteComment() {
+    const details = new VoteDetails(
+      this.comment.commentId,
+      this.articleId,
+      VoteValue.DOWM
+    )
+    this.$store.dispatch('articles/voteComment', details)
+  }
 }
 </script>
 

@@ -113,4 +113,52 @@ export default class Articles extends VuexModule {
       }
     })
   }
+
+  @Action({
+    rawError: true,
+  })
+  public voteComment(voteDetails: VoteDetails): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const direction = voteDetails.value === VoteValue.UP ? 'up' : 'down'
+      $axios
+        .post<Comment>(`/comments/${voteDetails.commentId}/vote/${direction}`)
+        .then((response) => {
+          this.context.commit('voteCommentMutation', voteDetails)
+          resolve()
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  }
+
+  @Mutation
+  private voteCommentMutation(details: VoteDetails) {
+    this.articleDetails.forEach((article) => {
+      if (article.articleId === details.articleId) {
+        article.comments.forEach((comment) => {
+          if (comment.commentId === details.commentId) {
+            comment.score += details.value.valueOf()
+          }
+        })
+      }
+    })
+  }
+}
+
+export enum VoteValue {
+  UP = 1,
+  DOWM = -1,
+}
+
+export class VoteDetails {
+  commentId: string
+  articleId: string
+  value: VoteValue
+
+  constructor(commentId: string, articleId: string, value: number) {
+    this.commentId = commentId
+    this.articleId = articleId
+    this.value = value
+  }
 }
