@@ -1,12 +1,16 @@
 <template>
   <main>
     <v-container>
-      <h1 class="text-h1">Recent articles</h1>
-      <article-preview
-        v-for="article in articles"
-        :key="article.articleId"
-        :article-data="article"
-      />
+      <h1 class="text-h1 mb-4">Recent articles</h1>
+      <v-row>
+        <v-col cols="10">
+          <article-preview
+            v-for="article in articles"
+            :key="article.articleId"
+            :article-data="article"
+          />
+        </v-col>
+      </v-row>
     </v-container>
   </main>
 </template>
