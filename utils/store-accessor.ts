@@ -17,5 +17,3 @@ export const modules = {
   articles: Articles,
   userStore: User,
 }
-
-// export { initialiseStores, articles }

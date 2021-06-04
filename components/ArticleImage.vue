@@ -34,8 +34,8 @@ enum LoadingState {
 @Component
 export default class ArticleImage extends Vue {
   @Prop() imageId!: string
-  @Prop({ default: true }) displayPlaceholder: Boolean
-  @Prop({ default: 'auto' }) height: string
+  @Prop({ default: true }) displayPlaceholder!: Boolean
+  @Prop({ default: 'auto' }) height!: string
   LoadingState = LoadingState
   state: LoadingState = LoadingState.LOADING
   src: string = ''

@@ -61,7 +61,7 @@ export default class SingleArticle extends Vue {
   imageSrc = ''
   get articleData(): ArticleDetail {
     return this.$store.state.articles.articleDetails.find(
-      (storedArticle) =>
+      (storedArticle: ArticleDetail) =>
         storedArticle.articleId === this.$route.params.articleId
     )
   }
@@ -86,11 +86,11 @@ export default class SingleArticle extends Vue {
     this.$store
       .dispatch('articles/getArticleDetail', this.$route.params.articleId)
       .then((response) => {
-        console.log(response)
+        // console.log(response)
       })
       .finally(() => {
         this.loading = false
-        console.log('haha')
+        // console.log('haha')
       })
   }
 }

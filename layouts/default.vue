@@ -28,6 +28,7 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <app-bar-user />
     </v-app-bar>
     <v-main>
       <v-container>
@@ -42,6 +43,9 @@
 
 <script>
 export default {
+  components: {
+    AppBarUser: () => import('~/components/AppBarUser'),
+  },
   data() {
     return {
       clipped: false,

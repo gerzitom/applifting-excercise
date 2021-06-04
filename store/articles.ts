@@ -2,11 +2,12 @@ import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
 import { $axios } from '~/utils/api'
 import Article from '~/types/Article'
 import ArticleDetail from '~/types/ArticleDetail'
+import { store } from '@/store'
 
 @Module({
   name: 'articles',
-  stateFactory: true,
-  namespaced: true,
+  dynamic: true,
+  store: store,
 })
 export default class Articles extends VuexModule {
   public articles: Array<Article> = []

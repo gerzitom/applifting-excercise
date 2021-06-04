@@ -1,11 +1,12 @@
 import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
 import { $axios } from '~/utils/api'
 import User from '~/types/User'
+import { store } from '@/store'
 
 @Module({
-  name: 'user',
-  stateFactory: true,
-  namespaced: true,
+  name: 'userStore',
+  dynamic: true,
+  store: store,
 })
 export default class UserStore extends VuexModule {
   private user!: User

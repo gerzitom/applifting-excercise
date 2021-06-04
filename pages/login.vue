@@ -50,9 +50,9 @@ export default {
       this.loading = true
       this.$auth
         .loginWith('local', { data: this.login })
-        // .then((response) => {
-        //   console.log(response)
-        // })
+        .then((response) => {
+          console.log(this.$auth)
+        })
         .catch((error) => {
           console.log(error)
           // this.alertText = error.response.data.message

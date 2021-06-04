@@ -99,7 +99,6 @@ export default {
           login: {
             url: '/login',
             method: 'post',
-            // propertyName: 'access_token',
           },
           logout: { url: '/logout', method: 'post' },
           user: {
@@ -111,9 +110,9 @@ export default {
     },
     redirect: {
       login: '/login',
-      home: '/admin',
+      home: '/',
       logout: '/logout',
     },
-    vuex: false,
+    // vuex: false,
   },
 }
