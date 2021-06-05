@@ -14,11 +14,11 @@
           <div class="d-flex align-center">
             <span class="d-block">{{ comment.score }}</span>
             <v-divider vertical class="mx-3" />
-            <v-btn icon @click="upvoteComment"
+            <v-btn icon @click="upvoteComment" :loading="loading"
               ><v-icon>mdi-chevron-up</v-icon></v-btn
             >
             <v-divider vertical class="mx-3" />
-            <v-btn icon @click="downvoteComment"
+            <v-btn icon @click="downvoteComment" :loading="loading"
               ><v-icon>mdi-chevron-down</v-icon></v-btn
             >
           </div>
@@ -42,22 +42,47 @@ import { VoteDetails, VoteValue } from '~/store/articles'
 export default class ArticleComment extends Vue {
   @Prop() comment!: Comment
   @Prop() articleId!: number
+  loading = false
   public upvoteComment() {
+    this.loading = false
     const details = new VoteDetails(
       this.comment.commentId,
       this.articleId,
       VoteValue.UP
     )
-    this.$store.dispatch('articles/voteComment', details)
+    this.$store
+      .dispatch('articles/voteComment', details)
+      .catch((err) => {
+        this.$nuxt.$emit('error', {
+          title: 'Connection error',
+          message: 'Could not upvote comment, please ty it later',
+          err,
+        })
+      })
+      .finally(() => {
+        this.loading = false
+      })
   }
 
   public downvoteComment() {
+    this.loading = false
     const details = new VoteDetails(
       this.comment.commentId,
       this.articleId,
       VoteValue.DOWM
     )
-    this.$store.dispatch('articles/voteComment', details)
+    this.$store
+      .dispatch('articles/voteComment', details)
+      .catch((err) => {
+        this.$nuxt.$emit('error', {
+          title: 'Connection error',
+          message: 'Could not downvote comment, please ty it later',
+          err,
+        })
+      })
+      .finally(() => {
+        this.loading = false
+      })
   }
 }
 </script>

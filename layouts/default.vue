@@ -38,6 +38,16 @@
     <v-footer :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
+
+    <v-snackbar v-model="showGlobalError" :timeout="-1" color="error">
+      <div class="d-flex align-center">
+        <v-icon class="mr-4">mdi-alert-circle</v-icon>
+        <div>
+          <p class="font-weight-bold my-1">{{ globalError.title }}</p>
+          <p class="my-1">{{ globalError.message }}</p>
+        </div>
+      </div>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -48,6 +58,11 @@ export default {
   },
   data() {
     return {
+      globalError: {
+        title: '',
+        message: '',
+      },
+      showGlobalError: false,
       clipped: false,
       drawer: false,
       fixed: false,
@@ -66,6 +81,13 @@ export default {
       miniVariant: false,
       title: 'Vuetify.js',
     }
+  },
+  created() {
+    this.$nuxt.$on('error', (error) => {
+      this.showGlobalError = true
+      this.globalError.title = error.title
+      this.globalError.message = error.message
+    })
   },
 }
 </script>
