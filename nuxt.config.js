@@ -41,6 +41,7 @@ export default {
       '@nuxtjs/moment',
       {
         /* module options */
+        defaultTimezone: 'Atlantic/Azores',
       },
     ],
   ],

@@ -43,12 +43,12 @@
         <v-skeleton-loader type="paragraph@4"></v-skeleton-loader>
       </template>
     </section>
-    <section v-if="!loading">
-      <article-comments
-        :comments="articleData.comments"
-        :article-id="$route.params.articleId"
-      ></article-comments>
-    </section>
+    <v-divider class="mb-9" />
+    <article-comments
+      v-if="!loading"
+      :comments="articleData.comments"
+      :article-id="$route.params.articleId"
+    ></article-comments>
   </div>
 </template>
 

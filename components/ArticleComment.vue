@@ -44,6 +44,8 @@ export default class ArticleComment extends Vue {
   @Prop() articleId!: string
   loading = false
   get formatedCreatedTime(): string {
+    const time = this.$moment.parseZone(this.comment.createdAt).utcOffset()
+    console.log(time)
     return this.$moment(this.comment.createdAt).fromNow()
   }
   public upvoteComment() {

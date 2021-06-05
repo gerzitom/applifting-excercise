@@ -1,23 +1,30 @@
 <template>
-  <div class="comments">
-    <h3 class="text-h4">Comments ({{ comments.length }})</h3>
-    <div class="add-comment mt-3" v-if="$auth.loggedIn">
+  <section class="comments">
+    <h3 class="text-h4 mb-7">Comments ({{ comments.length }})</h3>
+    <div class="add-comment" v-if="$auth.loggedIn">
       <v-row align="center">
         <v-col cols="1">
           <user-avatar></user-avatar>
         </v-col>
         <v-col>
-          <div class="d-flex align-center">
+          <form
+            onsubmit="return false"
+            @submit="addComment"
+            class="d-flex align-center"
+          >
             <v-text-field
               placeholder="Join the discusion"
               v-model="newComment"
             ></v-text-field>
-            <v-btn class="ml-5" :loading="loading" @click="addComment"
-              >Send</v-btn
-            >
-          </div>
+            <v-btn class="ml-5" :loading="loading" type="submit">Send</v-btn>
+          </form>
         </v-col>
       </v-row>
+    </div>
+    <div v-else>
+      <p class="text mb-7">
+        If you want to add comment, <nuxt-link to="/login">log in</nuxt-link>.
+      </p>
     </div>
     <article-comment
       v-for="comment in sortedComments"
@@ -25,7 +32,7 @@
       :comment="comment"
       :article-id="articleId"
     ></article-comment>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">
@@ -60,9 +67,14 @@ export default class ArticleCommnets extends Vue {
       this.$auth.user!.name as string,
       this.newComment
     )
-    this.$store.dispatch('articles/addComment', dto).then((response) => {
-      this.loading = false
-    })
+    this.$store
+      .dispatch('articles/addComment', dto)
+      .then((response) => {
+        this.newComment = ''
+      })
+      .finally(() => {
+        this.loading = false
+      })
   }
 }
 </script>
