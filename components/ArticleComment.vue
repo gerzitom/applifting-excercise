@@ -8,7 +8,7 @@
         <v-col>
           <div class="d-flex align-center">
             <p class="font-weight-bold text-body-1">{{ comment.author }}</p>
-            <p class="ml-3 text-caption">{{ comment.commentId }}</p>
+            <p class="ml-3 text-caption">{{ formatedCreatedTime }}</p>
           </div>
           <p class="text-body-2">{{ comment.content }}</p>
           <div class="d-flex align-center">
@@ -41,8 +41,11 @@ import { VoteDetails, VoteValue } from '~/store/articles'
 })
 export default class ArticleComment extends Vue {
   @Prop() comment!: Comment
-  @Prop() articleId!: number
+  @Prop() articleId!: string
   loading = false
+  get formatedCreatedTime(): string {
+    return this.$moment(this.comment.createdAt).fromNow()
+  }
   public upvoteComment() {
     this.loading = false
     const details = new VoteDetails(
@@ -53,9 +56,9 @@ export default class ArticleComment extends Vue {
     this.$store
       .dispatch('articles/voteComment', details)
       .catch((err) => {
-        this.$nuxt.$emit('error', {
-          title: 'Connection error',
-          message: 'Could not upvote comment, please ty it later',
+        this.$nuxt.$emit('temporary-error', {
+          // title: 'Connection error',
+          message: err.message,
           err,
         })
       })
@@ -74,9 +77,9 @@ export default class ArticleComment extends Vue {
     this.$store
       .dispatch('articles/voteComment', details)
       .catch((err) => {
-        this.$nuxt.$emit('error', {
-          title: 'Connection error',
-          message: 'Could not downvote comment, please ty it later',
+        this.$nuxt.$emit('temporary-error', {
+          // title: 'Connection error',
+          message: err.message,
           err,
         })
       })

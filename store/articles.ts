@@ -1,4 +1,4 @@
-import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
+import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 import { $axios } from '~/utils/api'
 import Article from '~/types/Article'
 import ArticleDetail from '~/types/ArticleDetail'
@@ -117,17 +117,26 @@ export default class Articles extends VuexModule {
   @Action({
     rawError: true,
   })
-  public voteComment(voteDetails: VoteDetails): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
+  public voteComment(voteDetails: VoteDetails): Promise<number> {
+    return new Promise<number>((resolve, reject) => {
       const direction = voteDetails.value === VoteValue.UP ? 'up' : 'down'
       $axios
         .post<Comment>(`/comments/${voteDetails.commentId}/vote/${direction}`)
         .then((response) => {
-          this.context.commit('voteCommentMutation', voteDetails)
-          resolve()
+          voteDetails.actualScore = response.data.score
+          try {
+            this.context.commit('voteCommentMutation', voteDetails)
+          } catch (e) {
+            reject(e)
+          }
+          resolve(response.data.score)
         })
         .catch((err) => {
-          reject(err)
+          const errorMessage =
+            voteDetails.value === VoteValue.DOWM ? 'downvote' : 'upvote'
+          reject(
+            new Error(`Could not ${errorMessage} comment, please try it later`)
+          )
         })
     })
   }
@@ -138,7 +147,10 @@ export default class Articles extends VuexModule {
       if (article.articleId === details.articleId) {
         article.comments.forEach((comment) => {
           if (comment.commentId === details.commentId) {
-            comment.score += details.value.valueOf()
+            if (comment.score === details.actualScore) {
+              throw new Error('You already voted.')
+            }
+            comment.score = details.actualScore
           }
         })
       }
@@ -155,10 +167,21 @@ export class VoteDetails {
   commentId: string
   articleId: string
   value: VoteValue
+  actualScore: number = 0
 
   constructor(commentId: string, articleId: string, value: number) {
     this.commentId = commentId
     this.articleId = articleId
     this.value = value
+  }
+}
+
+class CommentDetails {
+  commentId: string
+  articleId: string
+
+  constructor(commentId: string, articleId: string) {
+    this.commentId = commentId
+    this.articleId = articleId
   }
 }

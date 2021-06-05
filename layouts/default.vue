@@ -39,12 +39,33 @@
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
 
-    <v-snackbar v-model="showGlobalError" :timeout="-1" color="error">
+    <v-snackbar v-model="globalError.show" :timeout="-1" color="error">
+      <div class="d-flex align-center justify-space-between">
+        <div class="d-flex align-center">
+          <v-icon class="mr-4">mdi-alert-circle</v-icon>
+          <div>
+            <p v-if="globalError.title" class="font-weight-bold text-h6 my-1">
+              {{ globalError.title }}
+            </p>
+            <p class="my-1">{{ globalError.message }}</p>
+          </div>
+        </div>
+        <v-btn text @click="globalError.show = false"> Close </v-btn>
+      </div>
+    </v-snackbar>
+
+    <v-snackbar
+      v-model="globalTemporaryError.show"
+      :timeout="5000"
+      color="error"
+    >
       <div class="d-flex align-center">
         <v-icon class="mr-4">mdi-alert-circle</v-icon>
         <div>
-          <p class="font-weight-bold my-1">{{ globalError.title }}</p>
-          <p class="my-1">{{ globalError.message }}</p>
+          <p v-if="globalTemporaryError.title" class="font-weight-bold my-1">
+            {{ globalTemporaryError.title }}
+          </p>
+          <p class="my-1">{{ globalTemporaryError.message }}</p>
         </div>
       </div>
     </v-snackbar>
@@ -61,8 +82,13 @@ export default {
       globalError: {
         title: '',
         message: '',
+        show: false,
       },
-      showGlobalError: false,
+      globalTemporaryError: {
+        title: '',
+        message: '',
+        show: false,
+      },
       clipped: false,
       drawer: false,
       fixed: false,
@@ -84,9 +110,15 @@ export default {
   },
   created() {
     this.$nuxt.$on('error', (error) => {
-      this.showGlobalError = true
       this.globalError.title = error.title
       this.globalError.message = error.message
+      this.globalError.show = true
+    })
+
+    this.$nuxt.$on('temporary-error', (error) => {
+      this.globalTemporaryError.title = error.title
+      this.globalTemporaryError.message = error.message
+      this.globalTemporaryError.show = true
     })
   },
 }

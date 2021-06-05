@@ -57,7 +57,7 @@ export default class ArticleCommnets extends Vue {
     this.loading = true
     const dto = new NewCommentDto(
       this.articleId,
-      this.$auth.user.name,
+      this.$auth.user!.name as string,
       this.newComment
     )
     this.$store.dispatch('articles/addComment', dto).then((response) => {
