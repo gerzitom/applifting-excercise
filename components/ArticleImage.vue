@@ -39,6 +39,12 @@ export default class ArticleImage extends Vue {
   LoadingState = LoadingState
   state: LoadingState = LoadingState.LOADING
   src: string = ''
+
+  /**
+   * Make API call to get image by imageID
+   * Display loader, when loading, placeholder if no image is found or if request failed to retrieve image.
+   * Displays image when done.
+   */
   created() {
     if (this.imageId) {
       this.$store

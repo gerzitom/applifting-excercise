@@ -14,11 +14,11 @@
           <div class="d-flex align-center">
             <span class="d-block">{{ comment.score }}</span>
             <v-divider vertical class="mx-3" />
-            <v-btn icon @click="upvoteComment" :loading="loading"
+            <v-btn icon @click="voteComment(VoteValue.UP)" :loading="loading"
               ><v-icon>mdi-chevron-up</v-icon></v-btn
             >
             <v-divider vertical class="mx-3" />
-            <v-btn icon @click="downvoteComment" :loading="loading"
+            <v-btn icon @click="voteComment(VoteValue.DOWM)" :loading="loading"
               ><v-icon>mdi-chevron-down</v-icon></v-btn
             >
           </div>
@@ -43,44 +43,32 @@ export default class ArticleComment extends Vue {
   @Prop() comment!: Comment
   @Prop() articleId!: string
   loading = false
+  VoteValue = VoteValue
+
+  /**
+   * Gets amount of time, from creating of the article
+   */
   get formatedCreatedTime(): string {
-    const time = this.$moment.parseZone(this.comment.createdAt).utcOffset()
-    console.log(time)
     return this.$moment(this.comment.createdAt).fromNow()
   }
-  public upvoteComment() {
-    this.loading = false
-    const details = new VoteDetails(
-      this.comment.commentId,
-      this.articleId,
-      VoteValue.UP
-    )
-    this.$store
-      .dispatch('articles/voteComment', details)
-      .catch((err) => {
-        this.$nuxt.$emit('temporary-error', {
-          // title: 'Connection error',
-          message: err.message,
-          err,
-        })
-      })
-      .finally(() => {
-        this.loading = false
-      })
-  }
 
-  public downvoteComment() {
+  /**
+   * Voting for comment.
+   * Sends API request to vote for comment.
+   * If user has already voted or if there is any error, global error is dispatched.
+   * @param value:VoteValue choose from enum
+   */
+  public voteComment(value: VoteValue) {
     this.loading = false
     const details = new VoteDetails(
       this.comment.commentId,
       this.articleId,
-      VoteValue.DOWM
+      value
     )
     this.$store
       .dispatch('articles/voteComment', details)
       .catch((err) => {
         this.$nuxt.$emit('temporary-error', {
-          // title: 'Connection error',
           message: err.message,
           err,
         })

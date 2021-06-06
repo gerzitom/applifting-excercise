@@ -38,21 +38,11 @@ import UserAvatar from '~/components/UserAvatar.vue'
   },
 })
 export default class AppBarUser extends Vue {
-  mounted() {
-    console.log(this.$auth)
-  }
   get loggedIn(): boolean {
     return this.$auth.loggedIn
   }
   logout() {
-    this.$auth
-      .logout()
-      .then((response) => {
-        console.log('DONE')
-      })
-      .catch((err) => {
-        console.log('ERR')
-      })
+    this.$auth.logout()
   }
 }
 </script>

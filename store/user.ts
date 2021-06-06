@@ -11,16 +11,19 @@ import { store } from '@/store'
 export default class UserStore extends VuexModule {
   private user!: User
 
+  /**
+   * Sets logged in user
+   * @param user
+   */
   @Mutation
   setUser(user: User) {
     this.user = user
   }
 
-  @Action({
-    rawError: true,
-  })
-  async login() {}
-
+  /**
+   * Call API request to retrieve info about user by user ID
+   * @param userId ID of user
+   */
   @Action({
     rawError: true,
   })

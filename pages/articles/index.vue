@@ -12,14 +12,14 @@ import Article from '~/types/Article'
 
 @Component
 export default class Articles extends Vue {
-  // public articles: Array<Article> = []
+  /**
+   * Computed property, that
+   */
   get articles(): Array<Article> {
     return this.$store.state.articles
   }
   async fetch() {
-    // const userInfo = await this.$store.dispatch("user/getUserInfo", '23a10b02-7fcd-460a-995f-936e95edadea')
-    const articles = await this.$store.dispatch('articles/getArticles')
-    console.log(articles)
+    await this.$store.dispatch('articles/getArticles')
   }
 }
 </script>

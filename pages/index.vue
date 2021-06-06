@@ -35,10 +35,17 @@ import InfiniteLoading from 'vue-infinite-loading'
   },
 })
 export default class MainPage extends Vue {
+  /**
+   * Settings of how many articles should be loaded
+   */
   get articlesToLoad(): number {
     return 5
   }
   loadedArticles = 0
+
+  /**
+   * Gets all available articles from store and sort them by created date.
+   */
   get articles(): Article[] {
     return [...this.$store.state.articles.articles].sort((a, b) => {
       const createdA = this.$moment(a.createdAt)
@@ -49,6 +56,10 @@ export default class MainPage extends Vue {
   async fetch() {
     await this.loadNextArticles()
   }
+
+  /**
+   * Loads next part of articles from API
+   */
   async loadNextArticles() {
     const options = new ArticlesLoadDto(
       this.loadedArticles,
@@ -61,6 +72,13 @@ export default class MainPage extends Vue {
     this.loadedArticles += this.articlesToLoad
     return newArticles
   }
+
+  /**
+   * Handler for infinite scrolling plugin
+   * Call, when user scroll at the bottom of the page.
+   * Loads next part of articles
+   * @param $state state of infinite scrolling plugin
+   */
   infiniteHandler($state) {
     this.loadNextArticles().then((newArticles) => {
       if (newArticles.length > 0) {

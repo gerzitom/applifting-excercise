@@ -5,8 +5,8 @@
       <v-text-field label="Article title" v-model="articleTitle" />
       <v-textarea label="Perex" v-model="articlePerex"></v-textarea>
       <img
-        v-if="url"
-        :src="url"
+        v-if="imagePreviewSrc"
+        :src="imagePreviewSrc"
         alt="picture preview"
         class="new-article__picture-preview"
       />
@@ -42,8 +42,15 @@ export default class NewArticle extends Vue {
   articlePerex: string = ''
   articleContent: string = ''
   avatarImage
-  url: string = ''
+  imagePreviewSrc: string = ''
 
+  /**
+   * Saving article.
+   * Try to upload picture, if picture is chosen.
+   * Then try to save article with id of uploaded picture with other data.
+   * After successful upload, user is routed to list of all users articles.
+   * When error occur, global error event is dispatched
+   */
   async saveArticle() {
     const newImageId = await this.uploadPicture()
     const newArticleDto = new NewArticleDto(
@@ -55,16 +62,22 @@ export default class NewArticle extends Vue {
     this.$store
       .dispatch('articles/saveArticle', newArticleDto)
       .then((response) => {
-        this.$router.push('/')
+        this.$router.push('/admin/my-articles')
       })
       .catch((err) => {
-        console.log(err)
+        this.$nuxt.$emit('temporary-error', {
+          message: err.message,
+          err,
+        })
       })
   }
 
+  /**
+   * Uploads picture to backend
+   */
   uploadPicture(): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      if (this.url) {
+      if (this.imagePreviewSrc) {
         const formData = new FormData()
         formData.append('image', this.avatarImage)
         this.$store
@@ -83,9 +96,14 @@ export default class NewArticle extends Vue {
     })
   }
 
+  /**
+   * Called when picture input is changed
+   * Updates
+   * @param file
+   */
   handleAvatarChange(file) {
     this.avatarImage = file
-    this.url = URL.createObjectURL(file)
+    this.imagePreviewSrc = URL.createObjectURL(file)
   }
 }
 </script>

@@ -53,6 +53,10 @@ export default class ArticleCommnets extends Vue {
   @Prop() articleId!: string
   private newComment: string = ''
   private loading = false
+
+  /**
+   * Sort comment by crated date
+   */
   get sortedComments(): Comment[] {
     return [...this.comments].sort((a, b) => {
       const createdA = this.$moment(a.createdAt)
@@ -60,6 +64,10 @@ export default class ArticleCommnets extends Vue {
       return createdB.valueOf() - createdA.valueOf()
     })
   }
+
+  /**
+   * Sends API request to save new comment.
+   */
   public addComment() {
     this.loading = true
     const dto = new NewCommentDto(

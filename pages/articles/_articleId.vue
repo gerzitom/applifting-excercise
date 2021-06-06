@@ -67,12 +67,20 @@ import ArticleComments from '~/components/ArticleComments.vue'
 export default class SingleArticle extends Vue {
   loading = true
   imageSrc = ''
+
+  /**
+   * Computed property, that gets article detail from store
+   */
   get articleData(): ArticleDetail {
     return this.$store.state.articles.articleDetails.find(
       (storedArticle: ArticleDetail) =>
         storedArticle.articleId === this.$route.params.articleId
     )
   }
+
+  /**
+   * Specification for navigation breadcrumbs.
+   */
   get breadcrumbsItems() {
     if (this.articleData) {
       return [
@@ -87,9 +95,17 @@ export default class SingleArticle extends Vue {
       ]
     } else return []
   }
+
+  /**
+   * Formated date using moment.js
+   */
   get formatedDate(): string {
     return this.$moment(this.articleData.createdAt).format('DD. MM. YYYY')
   }
+
+  /**
+   * Gets article detail
+   */
   created() {
     this.$store
       .dispatch('articles/getArticleDetail', this.$route.params.articleId)

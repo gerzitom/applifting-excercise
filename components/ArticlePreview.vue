@@ -21,13 +21,6 @@
           <div class="text">
             {{ articleData.perex }}
           </div>
-          <!--          <v-row class="mt-3 mb-1">-->
-          <!--            <v-col cols="auto">-->
-          <!--              <v-icon>mdi-comment</v-icon>-->
-          <!--              <span>4</span>-->
-          <!--            </v-col>-->
-          <!--          </v-row>-->
-          <!--          <v-btn class="primary">Read whole article</v-btn>-->
         </v-col>
       </v-row>
     </v-card>
@@ -37,22 +30,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import Article from '~/types/Article'
-import { PropType } from 'vue'
 import ArticleImage from '~/components/ArticleImage.vue'
-
-const ArticlePreviewProps = Vue.extend({
-  props: {
-    articleData: {
-      type: Article,
-    },
-  },
-})
-
-enum LoadingState {
-  LOADING,
-  FAILED,
-  LOADED,
-}
 
 @Component({
   components: {
@@ -61,11 +39,10 @@ enum LoadingState {
 })
 export default class ArticlePreview extends Vue {
   @Prop() articleData!: Article
-  imageLoaded: boolean = false
-  loadingState: LoadingState = LoadingState.LOADING
-  LoadingState = LoadingState
-  private src: string = ''
 
+  /**
+   * Format created time
+   */
   get createdTime(): string {
     return this.$moment(this.articleData.createdAt).format('MM/DD/YYYY')
   }
