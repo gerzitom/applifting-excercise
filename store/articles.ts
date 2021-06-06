@@ -6,6 +6,7 @@ import { store } from '@/store'
 import NewCommentDto from '~/types/NewCommentDto'
 import Comment from '~/types/Comment'
 import NewArticleDto from '~/types/NewArticleDto'
+import ArticlesLoadDto from '~/types/ArticlesLoadDto'
 
 @Module({
   name: 'articles',
@@ -16,11 +17,11 @@ export default class Articles extends VuexModule {
   public articles: Array<Article> = []
   public articleDetails: Array<ArticleDetail> = []
 
-  @Mutation
-  setArticles(users: Article[]) {
-    this.articles = users
-  }
-
+  /**
+   * Checks if article is already in store.
+   * Add to store if is not in store.
+   * @param newArticle to be added to store.
+   */
   @Mutation
   addArticle(newArticle: Article) {
     const similarArticle = this.articles.find(
@@ -31,6 +32,11 @@ export default class Articles extends VuexModule {
     }
   }
 
+  /**
+   * Checks if article detail is in store
+   * Add to store if is not in store.
+   * @param articleDetail
+   */
   @Mutation
   addArticleDetail(articleDetail: ArticleDetail) {
     const articleExists = this.articleDetails.find(
@@ -42,10 +48,18 @@ export default class Articles extends VuexModule {
     }
   }
 
+  /**
+   * Fetch articles from backend.
+   * @param options:ArticlesLoadDto
+   */
   @Action({
     rawError: true,
   })
-  async getArticles(): Promise<Article[]> {
+  async getArticles(options?: ArticlesLoadDto): Promise<Article[]> {
+    let url = '/articles'
+    if (options) {
+      url += `?offset=${options.offset}&limit=${options.limit}`
+    }
     interface Response {
       pagination: {
         offset: number
@@ -54,12 +68,18 @@ export default class Articles extends VuexModule {
       }
       items: Article[]
     }
-    const response = await $axios.get<Response>('/articles')
+    const response = await $axios.get<Response>(url)
     const articles = response.data.items
-    this.context.commit('setArticles', articles)
+    articles.forEach((article) => {
+      this.context.commit('addArticle', article)
+    })
     return articles
   }
 
+  /**
+   * Store all article details of user.
+   * @return Promise with array of ArticlesDetails
+   */
   @Action({
     rawError: true,
   })
@@ -85,6 +105,11 @@ export default class Articles extends VuexModule {
     )
   }
 
+  /**
+   * Save article to backend.
+   * If success, store new article in articles and articleDetails
+   * @param newArticleDto data of new article
+   */
   @Action({
     rawError: true,
   })
@@ -100,6 +125,10 @@ export default class Articles extends VuexModule {
     return newArticle
   }
 
+  /**
+   * Gets article detail
+   * @param articleId id of article
+   */
   @Action({
     rawError: true,
   })
@@ -117,6 +146,11 @@ export default class Articles extends VuexModule {
     })
   }
 
+  /**
+   * Gets image by id
+   * @param imageId
+   * @return url to be used in <img/> tag
+   */
   @Action({
     rawError: true,
   })
@@ -136,6 +170,12 @@ export default class Articles extends VuexModule {
     })
   }
 
+  /**
+   * Add comment to backend.
+   * Send post request to API.
+   * When done, add new comment id to data and save new comment to store
+   * @param dto data of new comment
+   */
   @Action({
     rawError: true,
   })
@@ -156,6 +196,11 @@ export default class Articles extends VuexModule {
     })
   }
 
+  /**
+   * Mutation, that adds new comment to store
+   * @param newComment data of new comment
+   * @private
+   */
   @Mutation
   private addCommentMutation(newComment: Comment) {
     this.articleDetails.forEach((article) => {
@@ -165,6 +210,13 @@ export default class Articles extends VuexModule {
     })
   }
 
+  /**
+   * Votes for comment.
+   * API does not indicate, that user already voted, just send OK message.
+   * On API request is done dispatch mutation, that checks if vote by current user has been made, throw error if does.
+   * @param voteDetails specifies articleId, commentId and if comment should be upvoted or downvoted
+   * @return new score
+   */
   @Action({
     rawError: true,
   })
@@ -192,6 +244,13 @@ export default class Articles extends VuexModule {
     })
   }
 
+  /**
+   * Adds new score to comment.
+   * Checks if user has made mutation,
+   * if user did made mutation, throws new Error
+   * @param details
+   * @private
+   */
   @Mutation
   private voteCommentMutation(details: VoteDetails) {
     this.articleDetails.forEach((article) => {

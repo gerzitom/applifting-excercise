@@ -9,6 +9,12 @@
             :key="article.articleId"
             :article-data="article"
           />
+          <client-only>
+            <infinite-loading @infinite="infiniteHandler">
+              <div slot="no-more">No more articles</div>
+              <div slot="no-results">No articles found</div>
+            </infinite-loading>
+          </client-only>
         </v-col>
       </v-row>
     </v-container>
@@ -19,13 +25,20 @@
 import Article from '@/types/Article'
 import { Component, Vue } from 'nuxt-property-decorator'
 import ArticlePreview from '~/components/ArticlePreview.vue'
+import ArticlesLoadDto from '~/types/ArticlesLoadDto'
+import InfiniteLoading from 'vue-infinite-loading'
 
 @Component({
   components: {
     ArticlePreview,
+    InfiniteLoading,
   },
 })
 export default class MainPage extends Vue {
+  get articlesToLoad(): number {
+    return 5
+  }
+  loadedArticles = 0
   get articles(): Article[] {
     return [...this.$store.state.articles.articles].sort((a, b) => {
       const createdA = this.$moment(a.createdAt)
@@ -34,7 +47,28 @@ export default class MainPage extends Vue {
     })
   }
   async fetch() {
-    await this.$store.dispatch('articles/getArticles')
+    await this.loadNextArticles()
+  }
+  async loadNextArticles() {
+    const options = new ArticlesLoadDto(
+      this.loadedArticles,
+      this.articlesToLoad
+    )
+    const newArticles = await this.$store.dispatch(
+      'articles/getArticles',
+      options
+    )
+    this.loadedArticles += this.articlesToLoad
+    return newArticles
+  }
+  infiniteHandler($state) {
+    this.loadNextArticles().then((newArticles) => {
+      if (newArticles.length > 0) {
+        $state.loaded()
+      } else {
+        $state.complete()
+      }
+    })
   }
 }
 </script>

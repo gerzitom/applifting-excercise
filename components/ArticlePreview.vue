@@ -3,28 +3,10 @@
     :to="`/articles/${articleData.articleId}`"
     class="article-preview text-decoration-none"
   >
-    <v-card class="my-4 py-6 px-3">
+    <v-card class="my-4 py-6 px-3" :hover="true">
       <v-row>
         <v-col cols="3">
-          <v-skeleton-loader
-            v-if="loadingState === LoadingState.LOADING"
-            type="image"
-            height="150"
-          />
-          <div
-            class="image-placeholder"
-            v-if="loadingState === LoadingState.FAILED"
-          >
-            <v-icon class="article-preview__picture-placeholder" size="150"
-              >mdi-image-area</v-icon
-            >
-          </div>
-          <img
-            v-if="loadingState === LoadingState.LOADED"
-            :src="src"
-            :alt="articleData.title"
-            class="article-preview__picture"
-          />
+          <article-image :image-id="articleData.imageId"></article-image>
         </v-col>
         <v-col cols="9">
           <h2 class="text-h3">{{ articleData.title }}</h2>
@@ -39,13 +21,13 @@
           <div class="text">
             {{ articleData.perex }}
           </div>
-          <v-row class="mt-3 mb-1">
-            <v-col cols="auto">
-              <v-icon>mdi-comment</v-icon>
-              <span>4</span>
-            </v-col>
-          </v-row>
-          <v-btn class="primary">Read whole article</v-btn>
+          <!--          <v-row class="mt-3 mb-1">-->
+          <!--            <v-col cols="auto">-->
+          <!--              <v-icon>mdi-comment</v-icon>-->
+          <!--              <span>4</span>-->
+          <!--            </v-col>-->
+          <!--          </v-row>-->
+          <!--          <v-btn class="primary">Read whole article</v-btn>-->
         </v-col>
       </v-row>
     </v-card>
@@ -56,6 +38,7 @@
 import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import Article from '~/types/Article'
 import { PropType } from 'vue'
+import ArticleImage from '~/components/ArticleImage.vue'
 
 const ArticlePreviewProps = Vue.extend({
   props: {
@@ -71,7 +54,11 @@ enum LoadingState {
   LOADED,
 }
 
-@Component({})
+@Component({
+  components: {
+    ArticleImage,
+  },
+})
 export default class ArticlePreview extends Vue {
   @Prop() articleData!: Article
   imageLoaded: boolean = false
@@ -81,22 +68,6 @@ export default class ArticlePreview extends Vue {
 
   get createdTime(): string {
     return this.$moment(this.articleData.createdAt).format('MM/DD/YYYY')
-  }
-  async created() {
-    try {
-      const response = await this.$axios.get(
-        `/images/${this.articleData.imageId}`,
-        { responseType: 'arraybuffer' }
-      )
-      let blob = new Blob([response.data], {
-        type: response.headers['content-type'],
-      })
-      this.src = URL.createObjectURL(blob)
-      this.loadingState = LoadingState.LOADED
-    } catch (e) {
-      this.loadingState = LoadingState.FAILED
-      console.log(e)
-    }
   }
 }
 </script>

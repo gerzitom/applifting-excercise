@@ -40,15 +40,19 @@ export default class ArticleImage extends Vue {
   state: LoadingState = LoadingState.LOADING
   src: string = ''
   created() {
-    this.$store
-      .dispatch('articles/getImage', this.imageId)
-      .then((response) => {
-        this.src = response
-        this.state = LoadingState.LOADED
-      })
-      .catch((err) => {
-        this.state = LoadingState.FAILED
-      })
+    if (this.imageId) {
+      this.$store
+        .dispatch('articles/getImage', this.imageId)
+        .then((response) => {
+          this.src = response
+          this.state = LoadingState.LOADED
+        })
+        .catch((err) => {
+          this.state = LoadingState.FAILED
+        })
+    } else {
+      this.state = LoadingState.FAILED
+    }
   }
 }
 </script>

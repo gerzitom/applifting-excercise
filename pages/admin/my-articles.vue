@@ -1,5 +1,6 @@
 <template>
   <div class="my-articles">
+    <h1 class="text-h1">My articles</h1>
     <v-data-table
       :headers="headers"
       :items="articles"
