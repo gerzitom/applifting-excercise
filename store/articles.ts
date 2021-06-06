@@ -5,6 +5,7 @@ import ArticleDetail from '~/types/ArticleDetail'
 import { store } from '@/store'
 import NewCommentDto from '~/types/NewCommentDto'
 import Comment from '~/types/Comment'
+import NewArticleDto from '~/types/NewArticleDto'
 
 @Module({
   name: 'articles',
@@ -18,6 +19,16 @@ export default class Articles extends VuexModule {
   @Mutation
   setArticles(users: Article[]) {
     this.articles = users
+  }
+
+  @Mutation
+  addArticle(newArticle: Article) {
+    const similarArticle = this.articles.find(
+      (article) => article.articleId === newArticle.articleId
+    )
+    if (!similarArticle) {
+      this.articles.push(newArticle)
+    }
   }
 
   @Mutation
@@ -47,6 +58,46 @@ export default class Articles extends VuexModule {
     const articles = response.data.items
     this.context.commit('setArticles', articles)
     return articles
+  }
+
+  @Action({
+    rawError: true,
+  })
+  async getArticleDetails(): Promise<ArticleDetail[]> {
+    interface Response {
+      pagination: {
+        offset: number
+        limit: number
+        total: number
+      }
+      items: Article[]
+    }
+    const response = await $axios.get<Response>('/articles')
+    const articles = response.data.items
+    this.context.commit('setArticles', articles)
+    return await Promise.all(
+      articles.map(async (article) => {
+        return await this.context.dispatch(
+          'getArticleDetail',
+          article.articleId
+        )
+      })
+    )
+  }
+
+  @Action({
+    rawError: true,
+  })
+  async saveArticle(newArticleDto: NewArticleDto): Promise<Article> {
+    const response = await $axios.post<ArticleDetail>(
+      '/articles',
+      newArticleDto
+    )
+    const newArticleDetail = response.data as ArticleDetail
+    const newArticle = response.data as Article
+    this.context.commit('addArticle', newArticle)
+    this.context.commit('addArticleDetail', newArticleDetail)
+    return newArticle
   }
 
   @Action({
@@ -173,15 +224,5 @@ export class VoteDetails {
     this.commentId = commentId
     this.articleId = articleId
     this.value = value
-  }
-}
-
-class CommentDetails {
-  commentId: string
-  articleId: string
-
-  constructor(commentId: string, articleId: string) {
-    this.commentId = commentId
-    this.articleId = articleId
   }
 }

@@ -35,8 +35,8 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
-
     '@nuxtjs/auth-next',
+    '@nuxtjs/markdownit',
     [
       '@nuxtjs/moment',
       {
@@ -45,6 +45,10 @@ export default {
       },
     ],
   ],
+
+  markdownit: {
+    runtime: true, // Support `$md()`
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {

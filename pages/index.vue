@@ -27,8 +27,11 @@ import ArticlePreview from '~/components/ArticlePreview.vue'
 })
 export default class MainPage extends Vue {
   get articles(): Article[] {
-    const all = this.$store.state.articles.articles
-    return all
+    return [...this.$store.state.articles.articles].sort((a, b) => {
+      const createdA = this.$moment(a.createdAt)
+      const createdB = this.$moment(b.createdAt)
+      return createdB.valueOf() - createdA.valueOf()
+    })
   }
   async fetch() {
     await this.$store.dispatch('articles/getArticles')
