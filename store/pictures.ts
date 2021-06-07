@@ -1,10 +1,6 @@
-import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators'
+import { Action, Module, VuexModule } from 'vuex-module-decorators'
 import { $axios } from '~/utils/api'
-import Article from '~/types/Article'
-import ArticleDetail from '~/types/ArticleDetail'
 import { store } from '@/store'
-import NewCommentDto from '~/types/NewCommentDto'
-import Comment from '~/types/Comment'
 
 @Module({
   name: 'pictures',
@@ -14,12 +10,14 @@ import Comment from '~/types/Comment'
 export default class Pictures extends VuexModule {
   /**
    * Uploads image and returns new image ID
-   * @param formData including new image
+   * @param picture File to be uploaded
    */
   @Action({
     rawError: true,
   })
-  async uploadPicture(formData: FormData): Promise<string> {
+  async uploadPicture(picture: File): Promise<string> {
+    const formData = new FormData()
+    formData.append('image', picture)
     interface Response {
       imageId: string
       name: string
@@ -37,6 +35,30 @@ export default class Pictures extends VuexModule {
         .catch((err) => {
           reject(err)
           console.log(err)
+        })
+    })
+  }
+
+  /**
+   * Gets image by id
+   * @param imageId
+   * @return url to be used in <img/> tag
+   */
+  @Action({
+    rawError: true,
+  })
+  public getImage(imageId: string): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      $axios
+        .get(`/images/${imageId}`, { responseType: 'arraybuffer' })
+        .then((response) => {
+          let blob = new Blob([response.data], {
+            type: response.headers['content-type'],
+          })
+          resolve(URL.createObjectURL(blob))
+        })
+        .catch((err) => {
+          reject(err)
         })
     })
   }

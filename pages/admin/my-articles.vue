@@ -30,7 +30,7 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-btn icon to="/admin/edit-article/">
+        <v-btn icon :to="`/admin/edit-article/${item.articleId}`">
           <v-icon small class="mr-2">mdi-pencil</v-icon>
         </v-btn>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
@@ -44,9 +44,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import Article from '../../types/Article'
 import ArticleDetail from '~/types/ArticleDetail'
-import Comment from '~/types/Comment'
 class ArticleTableItem {
   articleId: string
   title: string
@@ -135,14 +133,6 @@ export default class MyArticles extends Vue {
   deleteItemConfirm() {
     this.desserts.splice(this.editedIndex, 1)
     this.closeDelete()
-  }
-
-  closeDelete() {
-    this.dialogDelete = false
-    this.$nextTick(() => {
-      this.editedItem = Object.assign({}, this.defaultItem)
-      this.editedIndex = -1
-    })
   }
 }
 </script>

@@ -94,7 +94,9 @@ export default class Articles extends VuexModule {
     }
     const response = await $axios.get<Response>('/articles')
     const articles = response.data.items
-    this.context.commit('setArticles', articles)
+    for (const article of articles) {
+      await this.context.commit('addArticle', articles)
+    }
     return await Promise.all(
       articles.map(async (article) => {
         return await this.context.dispatch(
@@ -123,6 +125,25 @@ export default class Articles extends VuexModule {
     this.context.commit('addArticle', newArticle)
     this.context.commit('addArticleDetail', newArticleDetail)
     return newArticle
+  }
+
+  /**
+   * Save article to backend.
+   * If success, store new article in articles and articleDetails
+   * @param articleDto data of new article
+   */
+  @Action({
+    rawError: true,
+  })
+  async updateArticle(articleDto: ArticleDetail): Promise<void> {
+    const response = await $axios.patch<ArticleDetail>(
+      `/articles/${articleDto.articleId}`,
+      articleDto
+    )
+    const newArticleDetail = response.data as ArticleDetail
+    const newArticle = response.data as Article
+    this.context.commit('updateArticle', newArticle)
+    this.context.commit('updateArticleDetail', newArticleDetail)
   }
 
   /**

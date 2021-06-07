@@ -69,6 +69,18 @@
         </div>
       </div>
     </v-snackbar>
+
+    <v-snackbar v-model="globalInfo.show" :timeout="5000">
+      <div class="d-flex align-center">
+        <!--        <v-icon class="mr-4">mdi-alert-circle</v-icon>-->
+        <div>
+          <p v-if="globalInfo.title" class="font-weight-bold my-1">
+            {{ globalInfo.title }}
+          </p>
+          <p class="my-1">{{ globalInfo.message }}</p>
+        </div>
+      </div>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -85,6 +97,11 @@ export default {
         show: false,
       },
       globalTemporaryError: {
+        title: '',
+        message: '',
+        show: false,
+      },
+      globalInfo: {
         title: '',
         message: '',
         show: false,
@@ -119,6 +136,12 @@ export default {
       this.globalTemporaryError.title = error.title
       this.globalTemporaryError.message = error.message
       this.globalTemporaryError.show = true
+    })
+
+    this.$nuxt.$on('info', (error) => {
+      this.globalInfo.title = error.title
+      this.globalInfo.message = error.message
+      this.globalInfo.show = true
     })
   },
 }
