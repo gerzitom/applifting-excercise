@@ -57,10 +57,10 @@ import ArticleUpdateDto from '~/types/ArticleUpdateDto'
 })
 export default class UpdateArticle extends Vue {
   public previewPictureSrc: string = ''
-  avatarImage
+  avatarImage!: File
   loading = true
   uploading = false
-  private articleId: number
+  articleId!: string
   articleContent: string = ''
   articleTitle: string = ''
   articlePerex: string = ''
@@ -152,7 +152,7 @@ export default class UpdateArticle extends Vue {
    * Updates preview
    * @param file
    */
-  handleAvatarChange(file) {
+  handleAvatarChange(file: File) {
     this.avatarImage = file
     if (file) {
       this.previewPictureSrc = URL.createObjectURL(file)

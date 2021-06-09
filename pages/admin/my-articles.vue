@@ -1,6 +1,6 @@
 <template>
   <div class="my-articles">
-    <h1 class="text-h1">My articles</h1>
+    <h1 class="text-h1 mt-10 mb-8">My articles</h1>
     <v-data-table
       :headers="headers"
       :items="articles"
@@ -75,6 +75,8 @@ class ArticleTableItem {
 })
 export default class MyArticles extends Vue {
   dialogDelete = false
+  articleIdToDelete!: string
+  indexToDelete!: number
 
   get headers() {
     return [
@@ -91,7 +93,7 @@ export default class MyArticles extends Vue {
     ]
   }
 
-  get articles(): ArticleDetail[] {
+  get articles(): ArticleTableItem[] {
     return this.sortedArticles.map((article) => {
       return new ArticleTableItem(
         article.articleId,
@@ -112,26 +114,26 @@ export default class MyArticles extends Vue {
     })
   }
 
-  created() {
+  mounted() {
     this.$store.dispatch('articles/getArticleDetails')
   }
 
-  deleteItem(item) {
-    this.editedIndex = this.articles.indexOf(item)
-    this.editedItem = Object.assign({}, item)
+  deleteItem(item: ArticleTableItem) {
+    this.indexToDelete = this.$store.state.articles.articleDetails.findIndex(
+      (article: ArticleDetail) => article.articleId === item.articleId
+    )
+    this.articleIdToDelete = item.articleId
     this.dialogDelete = true
   }
 
   closeDelete() {
     this.dialogDelete = false
-    this.$nextTick(() => {
-      this.editedItem = Object.assign({}, this.defaultItem)
-      this.editedIndex = -1
-    })
   }
 
   deleteItemConfirm() {
-    this.desserts.splice(this.editedIndex, 1)
+    if (this.indexToDelete > 0) {
+      this.$store.dispatch('articles/removeArticle', this.articleIdToDelete)
+    }
     this.closeDelete()
   }
 }

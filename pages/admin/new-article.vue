@@ -41,7 +41,7 @@ export default class NewArticle extends Vue {
   articleTitle: string = ''
   articlePerex: string = ''
   articleContent: string = ''
-  avatarImage
+  avatarImage!: File
   imagePreviewSrc: string = ''
 
   /**
@@ -101,7 +101,7 @@ export default class NewArticle extends Vue {
    * Updates
    * @param file
    */
-  handleAvatarChange(file) {
+  handleAvatarChange(file: File) {
     this.avatarImage = file
     this.imagePreviewSrc = URL.createObjectURL(file)
   }

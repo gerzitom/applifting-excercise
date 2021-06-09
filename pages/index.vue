@@ -79,7 +79,7 @@ export default class MainPage extends Vue {
    * Loads next part of articles
    * @param $state state of infinite scrolling plugin
    */
-  infiniteHandler($state) {
+  infiniteHandler($state: any) {
     this.loadNextArticles().then((newArticles) => {
       if (newArticles.length > 0) {
         $state.loaded()

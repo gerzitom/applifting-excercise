@@ -33,6 +33,34 @@ export default class Articles extends VuexModule {
   }
 
   /**
+   * Updates article
+   * @param updatedArticle to be added to store.
+   */
+  @Mutation
+  updateArticleMutation(updatedArticle: Article) {
+    const articleIndex = this.articles.findIndex(
+      (article) => article.articleId === updatedArticle.articleId
+    )
+    console.log(articleIndex)
+    // if (articleIndex === -1) throw new Error('Article was not found in store')
+    this.articles[articleIndex] = updatedArticle
+  }
+
+  /**
+   * Updates article detail
+   * @param updatedArticle to be added to store.
+   */
+  @Mutation
+  updateArticleDetailMutation(updatedArticle: ArticleDetail) {
+    const articleIndex = this.articleDetails.findIndex(
+      (article) => article.articleId === updatedArticle.articleId
+    )
+    console.log(articleIndex)
+    // if (articleIndex === -1) throw new Error('Article was not found in store')
+    this.articleDetails[articleIndex] = updatedArticle
+  }
+
+  /**
    * Checks if article detail is in store
    * Add to store if is not in store.
    * @param articleDetail
@@ -142,8 +170,8 @@ export default class Articles extends VuexModule {
     )
     const newArticleDetail = response.data as ArticleDetail
     const newArticle = response.data as Article
-    this.context.commit('updateArticle', newArticle)
-    this.context.commit('updateArticleDetail', newArticleDetail)
+    this.context.commit('updateArticleMutation', newArticle)
+    this.context.commit('updateArticleDetailMutation', newArticleDetail)
   }
 
   /**
@@ -165,6 +193,41 @@ export default class Articles extends VuexModule {
           reject(err)
         })
     })
+  }
+
+  /**
+   * Gets article detail
+   * @param articleId id of article
+   */
+  @Action({
+    rawError: true,
+  })
+  public removeArticle(articleId: number): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      $axios
+        .delete<void>(`/articles/${articleId}`)
+        .then(() => {
+          this.context.commit('removeArticleMutation', articleId)
+          resolve()
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  }
+
+  /**
+   * Updates article
+   * @param articleId Id of article to be removed
+   */
+  @Mutation
+  removeArticleMutation(articleId: string) {
+    this.articles = this.articles.filter(
+      (article) => article.articleId !== articleId
+    )
+    this.articleDetails = this.articleDetails.filter(
+      (article) => article.articleId !== articleId
+    )
   }
 
   /**
@@ -255,7 +318,7 @@ export default class Articles extends VuexModule {
           }
           resolve(response.data.score)
         })
-        .catch((err) => {
+        .catch(() => {
           const errorMessage =
             voteDetails.value === VoteValue.DOWM ? 'downvote' : 'upvote'
           reject(
