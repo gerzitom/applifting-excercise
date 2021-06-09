@@ -50,14 +50,11 @@ export default {
       this.loading = true
       this.$auth
         .loginWith('local', { data: this.login })
-        .then((response) => {
-          console.log(this.$auth)
-        })
-        .catch((error) => {
-          console.log(error)
-          // this.alertText = error.response.data.message
-          // this.error.username = true
-          // this.error.password = true
+        .catch((err) => {
+          this.$nuxt.$emit('error', {
+            title: 'API error',
+            message: err.message,
+          })
         })
         .finally(() => {
           this.loading = false

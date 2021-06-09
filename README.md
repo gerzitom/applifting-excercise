@@ -30,3 +30,4 @@ this.$nuxt.$emit('error', {
 ```
 
 My tenant ID is: 23a10b02-7fcd-460a-995f-936e95edadea
+

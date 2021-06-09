@@ -84,7 +84,9 @@
   </v-app>
 </template>
 
-<script>
+<script lang="ts">
+import WebsocketMessage from '@/types/WebsocketMessage'
+
 export default {
   components: {
     AppBarUser: () => import('~/components/AppBarUser'),
@@ -125,7 +127,21 @@ export default {
       title: 'Vuetify.js',
     }
   },
-  created() {
+  mounted() {
+    const socket = new WebSocket('ws://fullstack.exercise.applifting.cz')
+
+    // Connection opened
+    socket.addEventListener('open', function (event) {
+      socket.send('Hello Server!')
+    })
+
+    // Listen for messages
+    socket.addEventListener('message', (event) => {
+      const message: WebsocketMessage = JSON.parse(event.data)
+      console.log(this)
+      this.resolveWebsocketMessage(message)
+    })
+
     this.$nuxt.$on('error', (error) => {
       this.globalError.title = error.title
       this.globalError.message = error.message
@@ -143,6 +159,14 @@ export default {
       this.globalInfo.message = error.message
       this.globalInfo.show = true
     })
+  },
+  methods: {
+    resolveWebsocketMessage(message: WebsocketMessage) {
+      switch (message.changeType) {
+        case 'commentCreated':
+          this.$store.commit('articles/addCommentMutation', message.comment)
+      }
+    },
   },
 }
 </script>
