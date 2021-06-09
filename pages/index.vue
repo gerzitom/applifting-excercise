@@ -54,7 +54,14 @@ export default class MainPage extends Vue {
     })
   }
   async fetch() {
-    await this.loadNextArticles()
+    try {
+      await this.loadNextArticles()
+    } catch (err) {
+      this.$nuxt.$emit('temporary-error', {
+        title: 'Error',
+        message: err.message,
+      })
+    }
   }
 
   /**

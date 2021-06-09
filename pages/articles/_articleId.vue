@@ -26,8 +26,9 @@
       :image-id="articleData.imageId"
       :display-placeholder="false"
       height="350px"
+      class="mb-6"
     />
-    <section class="text-body-1">
+    <section class="text-body-1 pb-2">
       <template v-if="!loading">
         {{ articleData.perex }}
       </template>
@@ -36,9 +37,7 @@
       </template>
     </section>
     <section class="mb-10 mt-5 text-body-2">
-      <template v-if="!loading">
-        {{ articleData.content }}
-      </template>
+      <div v-if="!loading" v-html="$md.render(articleData.content)"></div>
       <template v-else>
         <v-skeleton-loader type="paragraph@4"></v-skeleton-loader>
       </template>
@@ -109,7 +108,7 @@ export default class SingleArticle extends Vue {
   created() {
     this.$store
       .dispatch('articles/getArticleDetail', this.$route.params.articleId)
-      .then((response) => {
+      .then(() => {
         // console.log(response)
       })
       .finally(() => {
