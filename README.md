@@ -31,3 +31,7 @@ this.$nuxt.$emit('error', {
 
 My tenant ID is: 23a10b02-7fcd-460a-995f-936e95edadea
 
+
+Admin id: d4a5d51b-2c1f-4768-8faa-3b2e2b13da95
+
+Admin API key: 0e44cc0e-4d90-40c2-a059-0e25e8effbe1
