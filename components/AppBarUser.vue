@@ -24,7 +24,13 @@
         </v-menu>
       </div>
     </div>
-    <v-btn to="/login" class="secondary" v-else>Log in</v-btn>
+    <v-btn
+      to="/login"
+      class="secondary logout-button"
+      jest-id="logout-button"
+      v-else
+      >Log in</v-btn
+    >
   </div>
 </template>
 
