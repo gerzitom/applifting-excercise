@@ -1,8 +1,17 @@
 <template>
   <div class="app-bar-user">
     <div class="d-flex" v-if="loggedIn">
-      <v-btn text to="/admin/my-articles"> My articles</v-btn>
-      <v-btn color="primary" text to="/admin/new-article"> New article</v-btn>
+      <v-btn text to="/admin/my-articles" id="my-articles-button">
+        My articles</v-btn
+      >
+      <v-btn
+        color="primary"
+        text
+        to="/admin/new-article"
+        id="new-article-button"
+      >
+        New article</v-btn
+      >
       <div class="d-flex">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
@@ -45,6 +54,7 @@ import UserAvatar from '~/components/UserAvatar.vue'
 })
 export default class AppBarUser extends Vue {
   get loggedIn(): boolean {
+    console.log(this.$auth.user)
     return this.$auth.loggedIn
   }
   logout() {
