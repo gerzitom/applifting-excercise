@@ -71,7 +71,6 @@ export default class LoginPage extends Vue {
     const ret: SelectData[] = []
     if (users) {
       users.forEach((value, index) => {
-        console.log(value)
         ret.push(new SelectData(value.username, value))
       })
     }
@@ -91,6 +90,7 @@ export default class LoginPage extends Vue {
       this.login.username = this.selectedUser.username
       this.xApiKey = this.selectedUser.apiKey
     }
+    this.$auth.$storage.setUniversal('apiKey', this.xApiKey)
     this.$axios.defaults.headers.common['X-API-KEY'] = this.xApiKey
     this.$auth
       .loginWith('local', { data: this.login })

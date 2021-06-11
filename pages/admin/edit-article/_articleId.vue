@@ -52,9 +52,7 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 import ArticleDetail from '~/types/ArticleDetail'
 import ArticleUpdateDto from '~/types/ArticleUpdateDto'
-@Component({
-  middleware: 'auth',
-})
+@Component({})
 export default class UpdateArticle extends Vue {
   public previewPictureSrc: string = ''
   avatarImage!: File

@@ -91,6 +91,7 @@ export default {
   components: {
     AppBarUser: () => import('~/components/AppBarUser'),
   },
+  middleware: 'axiosApiToken',
   data() {
     return {
       globalError: {

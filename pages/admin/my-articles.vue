@@ -70,9 +70,7 @@ class ArticleTableItem {
   }
 }
 
-@Component({
-  middleware: 'auth',
-})
+@Component({})
 export default class MyArticles extends Vue {
   dialogDelete = false
   articleIdToDelete!: string
@@ -87,7 +85,6 @@ export default class MyArticles extends Vue {
         value: 'title',
       },
       { text: 'Perex', value: 'perex' },
-      // { text: 'Author', value: 'fat' },
       { text: 'Comments', value: 'comments' },
       { text: 'Actions', value: 'actions', sortable: false },
     ]

@@ -84,9 +84,9 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 
-  // router: {
-  //   middleware: ['auth'],
-  // },
+  router: {
+    middleware: ['auth'],
+  },
 
   auth: {
     strategies: {
@@ -118,6 +118,6 @@ export default {
       home: '/',
       logout: '/logout',
     },
-    // vuex: false,
+    plugins: ['plugins/axios.js'],
   },
 }

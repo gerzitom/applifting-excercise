@@ -1,10 +1,15 @@
 export default class NewArticleDto {
   title: string
   perex: string
-  imageId: string
+  imageId?: string
   content: string
 
-  constructor(title: string, perex: string, imageId: string, content: string) {
+  constructor(
+    title: string,
+    perex: string,
+    imageId: string | undefined,
+    content: string
+  ) {
     this.title = title
     this.perex = perex
     this.imageId = imageId

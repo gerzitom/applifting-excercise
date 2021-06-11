@@ -34,9 +34,7 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import NewArticleDto from '~/types/NewArticleDto'
-@Component({
-  middleware: 'auth',
-})
+@Component({})
 export default class NewArticle extends Vue {
   articleTitle: string = ''
   articlePerex: string = ''
@@ -52,7 +50,7 @@ export default class NewArticle extends Vue {
    * When error occur, global error event is dispatched
    */
   async saveArticle() {
-    const newImageId = await this.uploadPicture()
+    const newImageId = await this.tryToUploadPicture()
     const newArticleDto = new NewArticleDto(
       this.articleTitle,
       this.articlePerex,
@@ -73,10 +71,11 @@ export default class NewArticle extends Vue {
   }
 
   /**
-   * Uploads picture to backend
+   * Uploads picture if new picture is available to backend.
+   * When upload fails, global error is dispatched
    */
-  uploadPicture(): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
+  tryToUploadPicture(): Promise<string | undefined> {
+    return new Promise<string | undefined>((resolve) => {
       if (this.imagePreviewSrc) {
         const formData = new FormData()
         formData.append('image', this.avatarImage)
@@ -92,7 +91,7 @@ export default class NewArticle extends Vue {
               err,
             })
           })
-      } else reject()
+      } else resolve(undefined)
     })
   }
 
