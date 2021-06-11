@@ -49,83 +49,104 @@
 </template>
 
 <script lang="ts">
+import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import LocalUser from '@/types/LocalUser'
 
-export default {
-  name: 'login',
-  data() {
-    return {
-      login: {
-        username: 'gerzitom',
-        password: 'haha',
-      },
-      xApiKey: '',
-      selectedUser: null,
-      show: false,
-      loading: false,
-      selectedUser: null,
+@Component
+export default class LoginPage extends Vue {
+  login = new LoginData()
+  xApiKey = ''
+  selectedUser: LocalUser | null = null
+  show = false
+  loading = false
+
+  /**
+   * Getting available users from local storage.
+   * This must be done because API can not link api key and username
+   */
+  get availableUsers() {
+    const users: LocalUser[] = this.$auth.$storage.getLocalStorage(
+      'users'
+    ) as LocalUser[]
+    const ret: SelectData[] = []
+    if (users) {
+      users.forEach((value, index) => {
+        console.log(value)
+        ret.push(new SelectData(value.username, value))
+      })
     }
-  },
-  computed: {
-    availableUsers() {
-      const users: LocalUser[] = this.$auth.$storage.getLocalStorage('users')
-      const ret = [
-        {
-          user: 'No user',
-          value: null,
-        },
-      ]
-      if (users) {
-        users.forEach((value, index) => {
-          ret.push({
-            user: value.username,
-            value: value,
-          })
+    return ret
+  }
+
+  /**
+   * Firstly check if user is selected from available users
+   * or if new is added.
+   * Then send API request to login user.
+   * If user is logged in, new user is added to local storage to keep for other logins.
+   * Global error is dispatched, if API request failed
+   */
+  userLogin() {
+    this.loading = true
+    if (this.selectedUser) {
+      this.login.username = this.selectedUser.username
+      this.xApiKey = this.selectedUser.apiKey
+    }
+    this.$axios.defaults.headers.common['X-API-KEY'] = this.xApiKey
+    this.$auth
+      .loginWith('local', { data: this.login })
+      .then((response) => {
+        const user = new LocalUser(this.xApiKey, this.login.username)
+        this.addUserToLocalStorage(user)
+      })
+      .catch((err) => {
+        this.$nuxt.$emit('error', {
+          title: 'API error',
+          message: err.message,
         })
-      }
-      return ret
-    },
-  },
-  methods: {
-    userLogin() {
-      this.loading = true
-      if (this.selectedUser) {
-        if (this.selectedUser.value !== null) {
-          this.login.username = this.selectedUser.username
-          this.xApiKey = this.selectedUser.apiKey
-        }
-      }
-      this.$axios.defaults.headers.common['X-API-KEY'] = this.xApiKey
-      this.$auth
-        .loginWith('local', { data: this.login })
-        .then((response) => {
-          const user = new LocalUser(this.xApiKey, this.login.username)
-          this.addUserToLocalStorage(user)
-        })
-        .catch((err) => {
-          this.$nuxt.$emit('error', {
-            title: 'API error',
-            message: err.message,
-          })
-        })
-        .finally(() => {
-          this.loading = false
-        })
-    },
-    addUserToLocalStorage(user: LocalUser) {
-      let users: LocalUser[] = this.$auth.$storage.getLocalStorage('users')
-      if (!users) {
-        users = []
-      }
-      const similarUser: LocalUser = users.find(
-        (storedUser) => storedUser.username === user.username
-      )
-      if (!similarUser) {
-        users.push(user)
-        this.$auth.$storage.setLocalStorage('users', users)
-      }
-    },
-  },
+      })
+      .finally(() => {
+        this.loading = false
+      })
+  }
+
+  /**
+   * Adds user and api key to local storage
+   * @param user to be added to local storage
+   */
+  addUserToLocalStorage(user: LocalUser) {
+    let users = this.$auth.$storage.getLocalStorage('users') as LocalUser[]
+    if (!users) {
+      users = []
+    }
+    const similarUser = users.find(
+      (storedUser) => storedUser.username === user.username
+    )
+    if (!similarUser) {
+      users.push(user)
+      this.$auth.$storage.setLocalStorage('users', users)
+    }
+  }
+}
+
+/**
+ * Data structure for login
+ */
+class LoginData {
+  username: string = ''
+  password: string = ''
+}
+
+/**
+ * Data structure for vuetify select
+ */
+class SelectData {
+  user: string
+  value: LocalUser
+
+  constructor(user: string, value: LocalUser) {
+    this.user = user
+    this.value = value
+  }
 }
 </script>
 

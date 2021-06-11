@@ -84,7 +84,7 @@
   </v-app>
 </template>
 
-<script lang="ts">
+<script>
 import WebsocketMessage from '@/types/WebsocketMessage'
 
 export default {
@@ -137,7 +137,7 @@ export default {
 
     // Listen for messages
     socket.addEventListener('message', (event) => {
-      const message: WebsocketMessage = JSON.parse(event.data)
+      const message = JSON.parse(event.data)
       console.log(this)
       this.resolveWebsocketMessage(message)
     })
@@ -161,7 +161,7 @@ export default {
     })
   },
   methods: {
-    resolveWebsocketMessage(message: WebsocketMessage) {
+    resolveWebsocketMessage(message) {
       switch (message.changeType) {
         case 'commentCreated':
           this.$store.commit('articles/addCommentMutation', message.comment)
