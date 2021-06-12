@@ -27,17 +27,29 @@ This means, for the app to work properly, login form must be filled with user cr
 I solved it with local storage, that every user can link its username with api key. This data is stored in local storage and can be choosen during login.
 Proper solution (In my opinion will be: adding api key or tenant Id in response to login)
 
-2)  Articles from API are not retrieved by createdDate in descending order. This makes lazy loading of other articles buggy and not working properly. (I implemented lazy loading just to prove, I can do it :)). 
+2) Articles from API are not retrieved by createdDate in descending order. This makes lazy loading of other articles buggy and not working properly. (I implemented lazy loading just to prove, I can do it :)). 
 
+3) Can not get all articles of all tenants, endpoint for getting all articles require api key and displays only articles of current tenant.
+Possible solution: create another endpoint for getting all articles without api key.
 ## Global events
-It there is global event, you could emit global nux event, message must have title and message and could have error object as well:
+It there is global event, you could emit global nux event, message must have title and message and could have error object as well. App will display snackbar at the bottom of the screen with error info.
+There are 3 types of this events:
+### error
+Main serious error. Snackbar has red color and no delay of closing. 
 ```js
 this.$nuxt.$emit('error', {
     title: 'Connection error',
     message: 'Could not upvote comment, please ty it later',
     err,
 })
+
+
 ```
+### Temporary error
+Same as error, but message will dissapear after 4 seconds.
+
+### Info
+Display info snackbar for 4 seconds
 
 My tenant ID is: 23a10b02-7fcd-460a-995f-936e95edadea
 
