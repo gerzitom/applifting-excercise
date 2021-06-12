@@ -59,3 +59,11 @@ $ npm run start
 # generate static project
 $ npm run generate
 ```
+
+# Test user
+```json
+{
+    "apiKey": "73988432-8a7d-4558-bb59-d27d4fabf2c6",
+    "username": "gerzitom"
+}
+```

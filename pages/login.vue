@@ -13,11 +13,7 @@
           outlined
         ></v-select>
         <template v-if="!selectedUser">
-          <v-text-field
-            v-model="xApiKey"
-            label="Apie key"
-            :disabled="loading"
-          />
+          <v-text-field v-model="xApiKey" label="Api key" :disabled="loading" />
           <v-text-field
             v-model="login.username"
             label="Username"
@@ -49,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 import LocalUser from '@/types/LocalUser'
 
 @Component
@@ -70,7 +66,7 @@ export default class LoginPage extends Vue {
     ) as LocalUser[]
     const ret: SelectData[] = []
     if (users) {
-      users.forEach((value, index) => {
+      users.forEach((value) => {
         ret.push(new SelectData(value.username, value))
       })
     }
@@ -94,7 +90,7 @@ export default class LoginPage extends Vue {
     this.$axios.defaults.headers.common['X-API-KEY'] = this.xApiKey
     this.$auth
       .loginWith('local', { data: this.login })
-      .then((response) => {
+      .then(() => {
         const user = new LocalUser(this.xApiKey, this.login.username)
         this.addUserToLocalStorage(user)
       })
