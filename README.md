@@ -10,6 +10,7 @@ Proper solution (In my opinion will be: adding api key or tenant Id in response 
 
 3) Can not get all articles of all tenants, endpoint for getting all articles require api key and displays only articles of current tenant.
 Possible solution: create another endpoint for getting all articles without api key.
+
 # Global events
 It there is global event, you could emit global nux event, message must have title and message and could have error object as well. App will display snackbar at the bottom of the screen with error info.
 There are 3 types of this events:
