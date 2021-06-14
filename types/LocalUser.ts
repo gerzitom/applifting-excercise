@@ -1,9 +1,9 @@
 export default class LocalUser {
-  apiKey: string
+  userId: string
   username: string
 
-  constructor(apiKey: string, username: string) {
-    this.apiKey = apiKey
+  constructor(userId: string, username: string) {
+    this.userId = userId
     this.username = username
   }
 }

@@ -12,6 +12,10 @@ Proper solution (In my opinion will be: adding api key or tenant Id in response 
 Possible solution: create another endpoint for getting all articles without api key.
 
 4) Weird time zone. I do not know, if I have bad settings, but, I had to set specific time zone.
+
+5) No backend validation of data for creating new article
+
+6) User can not be linked with any picture as avatar
 # Global events
 It there is global event, you could emit global nux event, message must have title and message and could have error object as well. App will display snackbar at the bottom of the screen with error info.
 There are 3 types of this events:

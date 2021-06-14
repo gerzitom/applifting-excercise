@@ -77,10 +77,12 @@ export default class SingleArticle extends Vue {
    * Computed property, that gets article detail from store
    */
   get articleData(): ArticleDetail {
-    return this.$store.state.articles.articleDetails.find(
+    const ret = this.$store.state.articles.articleDetails.find(
       (storedArticle: ArticleDetail) =>
         storedArticle.articleId === this.$route.params.articleId
     )
+    console.log(ret)
+    return ret
   }
 
   /**

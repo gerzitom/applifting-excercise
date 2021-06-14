@@ -17,8 +17,13 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn text v-bind="attrs" v-on="on">
               <div class="d-flex align-center">
-                <span class="mr-2">{{ $auth.user.name }}</span>
-                <user-avatar />
+                <template v-if="$auth.user.name">
+                  <span class="mr-2">{{ $auth.user.name }}</span>
+                  <user-avatar />
+                </template>
+                <template v-else>
+                  <v-skeleton-loader type="text,avatar"></v-skeleton-loader>
+                </template>
               </div>
             </v-btn>
           </template>
@@ -44,7 +49,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 import UserAvatar from '~/components/UserAvatar.vue'
 
 @Component({
@@ -54,7 +59,6 @@ import UserAvatar from '~/components/UserAvatar.vue'
 })
 export default class AppBarUser extends Vue {
   get loggedIn(): boolean {
-    console.log(this.$auth.user)
     return this.$auth.loggedIn
   }
   logout() {

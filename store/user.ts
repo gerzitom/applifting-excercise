@@ -27,7 +27,7 @@ export default class UserStore extends VuexModule {
   @Action({
     rawError: true,
   })
-  async getUserInfo(userId: number) {
+  async getUserInfo(userId: string): Promise<User> {
     const userInfo = await $axios.get<User>(`/tenants/${userId}`)
     this.context.commit('setUser', userInfo.data)
     return userInfo.data

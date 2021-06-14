@@ -97,7 +97,6 @@ export default {
     // Listen for messages
     socket.addEventListener('message', (event) => {
       const message = JSON.parse(event.data)
-      console.log(this)
       this.resolveWebsocketMessage(message)
     })
 

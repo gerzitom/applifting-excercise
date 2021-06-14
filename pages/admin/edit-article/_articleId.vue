@@ -42,7 +42,6 @@
           </v-col>
         </v-row>
         <v-btn type="submit" :loading="uploading">Update article</v-btn>
-        <v-btn color="error" text :disabled="uploading">Delete article</v-btn>
       </v-form>
     </template>
   </div>

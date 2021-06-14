@@ -106,10 +106,7 @@ export default {
             method: 'post',
           },
           logout: { url: '/logout', method: 'post' },
-          user: {
-            url: '/tenants/23a10b02-7fcd-460a-995f-936e95edadea',
-            method: 'get',
-          },
+          user: false,
         },
       },
     },

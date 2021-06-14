@@ -13,7 +13,7 @@
           outlined
         ></v-select>
         <template v-if="!selectedUser">
-          <v-text-field v-model="xApiKey" label="Api key" :disabled="loading" />
+          <v-text-field v-model="userId" label="User ID" :disabled="loading" />
           <v-text-field
             v-model="login.username"
             label="Username"
@@ -51,7 +51,7 @@ import LocalUser from '@/types/LocalUser'
 @Component
 export default class LoginPage extends Vue {
   login = new LoginData()
-  xApiKey = ''
+  userId = ''
   selectedUser: LocalUser | null = null
   show = false
   loading = false
@@ -80,18 +80,23 @@ export default class LoginPage extends Vue {
    * If user is logged in, new user is added to local storage to keep for other logins.
    * Global error is dispatched, if API request failed
    */
-  userLogin() {
+  async userLogin() {
     this.loading = true
     if (this.selectedUser) {
       this.login.username = this.selectedUser.username
-      this.xApiKey = this.selectedUser.apiKey
+      this.userId = this.selectedUser.userId
     }
-    this.$auth.$storage.setUniversal('apiKey', this.xApiKey)
-    this.$axios.defaults.headers.common['X-API-KEY'] = this.xApiKey
+    // TODO Bug after refreshing page
+    const userInfo = await this.$store.dispatch('user/getUserInfo', this.userId)
+    await this.$auth.$storage.setUniversal('apiKey', userInfo.apiKey)
+    this.$axios.defaults.headers.common['X-API-KEY'] = userInfo.apiKey
+    this.$axios.setHeader('X-API-KEY', userInfo.apiKey)
     this.$auth
       .loginWith('local', { data: this.login })
       .then(() => {
-        const user = new LocalUser(this.xApiKey, this.login.username)
+        const user = new LocalUser(this.userId, this.login.username)
+        this.$auth.setUser(userInfo)
+        this.$auth.$storage.setUniversal('user', userInfo)
         this.addUserToLocalStorage(user)
       })
       .catch((err) => {

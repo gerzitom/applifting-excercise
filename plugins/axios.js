@@ -1,9 +1,12 @@
 export default ({ $axios, $auth }) => {
-  if ($auth) {
-    const apiKey = $auth.$storage.getUniversal('apiKey')
-    $axios.onRequest(() => {
+  $axios.onRequest(() => {
+    if ($auth) {
+      const apiKey = $auth.$storage.getUniversal('apiKey')
       $axios.setHeader('X-API-KEY', apiKey)
-      // $axios.setHeader('X-API-KEY', '73988432-8a7d-4558-bb59-d27d4fabf2c6')
-    })
-  }
+      if (!$auth.user.tenantId) {
+        const userInfo = $auth.$storage.getUniversal('user')
+        $auth.setUser(userInfo)
+      }
+    }
+  })
 }

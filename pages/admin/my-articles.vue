@@ -10,18 +10,18 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-dialog v-model="dialogDelete" max-width="500px">
-            <v-card>
-              <v-card-title class="text-h5"
-                >Are you sure you want to delete this item?</v-card-title
+          <v-dialog v-model="dialogDelete" max-width="320px">
+            <v-card class="pb-3 pt-2">
+              <v-card-title class="text-h5 text-center"
+                >Are you sure you want to delete this article?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete"
-                  >Cancel</v-btn
+                <v-btn color="blue darken-1" @click="deleteItemConfirm"
+                  >Yes</v-btn
                 >
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                  >OK</v-btn
+                <v-btn color="error darken-1" text @click="closeDelete"
+                  >No</v-btn
                 >
                 <v-spacer></v-spacer>
               </v-card-actions>
@@ -35,9 +35,6 @@
         </v-btn>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
-      <template v-slot:no-data>
-        <!--        <v-btn color="primary" @click="initialize"> Reset </v-btn>-->
-      </template>
     </v-data-table>
   </div>
 </template>
@@ -45,30 +42,6 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import ArticleDetail from '~/types/ArticleDetail'
-class ArticleTableItem {
-  articleId: string
-  title: string
-  perex: string
-  createdAt: string
-  lastUpdatedAt: string
-  comments: number
-
-  constructor(
-    articleId: string,
-    title: string,
-    perex: string,
-    createdAt: string,
-    lastUpdatedAt: string,
-    comments: number
-  ) {
-    this.articleId = articleId
-    this.title = title
-    this.perex = perex
-    this.createdAt = createdAt
-    this.lastUpdatedAt = lastUpdatedAt
-    this.comments = comments
-  }
-}
 
 @Component({})
 export default class MyArticles extends Vue {
@@ -132,6 +105,31 @@ export default class MyArticles extends Vue {
       this.$store.dispatch('articles/removeArticle', this.articleIdToDelete)
     }
     this.closeDelete()
+  }
+}
+
+class ArticleTableItem {
+  articleId: string
+  title: string
+  perex: string
+  createdAt: string
+  lastUpdatedAt: string
+  comments: number
+
+  constructor(
+    articleId: string,
+    title: string,
+    perex: string,
+    createdAt: string,
+    lastUpdatedAt: string,
+    comments: number
+  ) {
+    this.articleId = articleId
+    this.title = title
+    this.perex = perex
+    this.createdAt = createdAt
+    this.lastUpdatedAt = lastUpdatedAt
+    this.comments = comments
   }
 }
 </script>

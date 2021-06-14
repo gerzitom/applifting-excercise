@@ -34,7 +34,6 @@ export default class Pictures extends VuexModule {
         })
         .catch((err) => {
           reject(err)
-          console.log(err)
         })
     })
   }
