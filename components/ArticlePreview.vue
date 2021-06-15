@@ -1,6 +1,6 @@
 <template>
   <nuxt-link
-    :to="`/articles/${articleData.articleId}`"
+    :to="`/articles/${createSlug(articleData)}`"
     class="article-preview text-decoration-none"
   >
     <v-card class="my-4 py-6 px-3" :hover="true">
@@ -45,6 +45,15 @@ export default class ArticlePreview extends Vue {
    */
   get createdTime(): string {
     return this.$moment(this.articleData.createdAt).format('MM/DD/YYYY')
+  }
+
+  createSlug(articleData: Article): string {
+    console.log(articleData)
+    const slug = articleData.title
+      .toLowerCase()
+      .replace(/ /g, '-')
+      .replace(/[^\w-]+/g, '')
+    return slug + '_' + articleData.articleId
   }
 }
 </script>

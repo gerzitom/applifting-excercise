@@ -47,7 +47,7 @@
       <article-comments
         v-if="!loading"
         :comments="articleData.comments"
-        :article-id="$route.params.articleId"
+        :article-id="articleId"
       ></article-comments>
     </template>
     <template v-else>
@@ -77,12 +77,19 @@ export default class SingleArticle extends Vue {
    * Computed property, that gets article detail from store
    */
   get articleData(): ArticleDetail {
-    const ret = this.$store.state.articles.articleDetails.find(
+    return this.$store.state.articles.articleDetails.find(
       (storedArticle: ArticleDetail) =>
-        storedArticle.articleId === this.$route.params.articleId
+        storedArticle.articleId === this.articleId
     )
-    console.log(ret)
-    return ret
+  }
+
+  get articleId(): string {
+    const parts = this.$route.params.articleId.split('_')
+    try {
+      return parts[1]
+    } catch (err) {
+      this.error = true
+    }
   }
 
   /**
@@ -115,7 +122,7 @@ export default class SingleArticle extends Vue {
    */
   created() {
     this.$store
-      .dispatch('articles/getArticleDetail', this.$route.params.articleId)
+      .dispatch('articles/getArticleDetail', this.articleId)
       .catch((err) => {
         this.error = true
         this.$nuxt.$emit('temporary-error', {
