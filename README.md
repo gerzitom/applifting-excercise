@@ -1,3 +1,12 @@
+# Deployed
+##Url
+https://rocky-tundra-51219.herokuapp.com/
+## Credentials
+**User ID**: 23a10b02-7fcd-460a-995f-936e95edadea 
+
+**User**: gerzitom
+
+
 # API problems
 While building this app, I have encoutered some bugs with the API.
 
@@ -18,6 +27,10 @@ Possible solution: create another endpoint for getting all articles without api 
 6) User can not be linked with any picture as avatar
 
 7) No endpoint for related articles.
+
+8) Login endpoint returns 2 different error structures. If password is missing return error message with preciselly described errors in object errors.
+But if wrong credentials are entered, returns simple data structure with just title and message saying, that wrong creadentials are entered
+
 
 # Global events
 It there is global event, you could emit global nux event, message must have title and message and could have error object as well. App will display snackbar at the bottom of the screen with error info.
