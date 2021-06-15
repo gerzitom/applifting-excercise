@@ -83,12 +83,17 @@ export default class SingleArticle extends Vue {
     )
   }
 
+  /**
+   * Parse url and gets article ID
+   * If there is any problem in the url, error message is displayed
+   */
   get articleId(): string {
     const parts = this.$route.params.articleId.split('_')
-    try {
+    if (parts.length > 1) {
       return parts[1]
-    } catch (err) {
+    } else {
       this.error = true
+      return ''
     }
   }
 

@@ -123,7 +123,7 @@ export default class NewArticle extends Vue {
    * @return true if all inputs are validated
    */
   validateInputs(): boolean {
-    this.$refs.form.validate()
+    ;(this.$refs.form as Vue & { validate: () => boolean }).validate()
     if (this.articleTitle === '') return false
     if (this.articleContent === '') return false
     return true
