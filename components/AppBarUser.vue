@@ -29,9 +29,6 @@
           </template>
           <v-list>
             <v-list-item>
-              <v-btn text>Settings</v-btn>
-            </v-list-item>
-            <v-list-item>
               <v-btn text class="error" @click="logout">Log out</v-btn>
             </v-list-item>
           </v-list>
@@ -63,6 +60,7 @@ export default class AppBarUser extends Vue {
   }
   logout() {
     this.$auth.logout()
+    this.$store.commit('articles/REMOVE_ALL_ARTICLES')
   }
 }
 </script>

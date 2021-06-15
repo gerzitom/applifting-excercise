@@ -123,7 +123,7 @@ export default class Articles extends VuexModule {
     const response = await $axios.get<Response>('/articles')
     const articles = response.data.items
     for (const article of articles) {
-      await this.context.commit('addArticle', articles)
+      await this.context.commit('addArticle', article)
     }
     return await Promise.all(
       articles.map(async (article) => {
@@ -228,6 +228,15 @@ export default class Articles extends VuexModule {
     this.articleDetails = this.articleDetails.filter(
       (article) => article.articleId !== articleId
     )
+  }
+
+  /**
+   * Remove all articles from store
+   */
+  @Mutation
+  public REMOVE_ALL_ARTICLES() {
+    this.articles = []
+    this.articleDetails = []
   }
 
   /**

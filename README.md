@@ -4,7 +4,7 @@ While building this app, I have encoutered some bugs with the API.
 1) API key and tenantId is only available when creating the user (tenant) but not, when user tries to log into app.
 This means, for the app to work properly, login form must be filled with user creadentials as well as API key to work properly.
 I solved it with local storage, that every user can link its username with api key. This data is stored in local storage and can be choosen during login.
-Proper solution (In my opinion will be: adding api key or tenant Id in response to login)
+Proper solution (In my opinion will be: adding api key or tenant Id in response to login or creating endopoint, that returns user information by api key)
 
 2) Articles from API are not retrieved by createdDate in descending order. This makes lazy loading of other articles buggy and not working properly. (I implemented lazy loading just to prove, I can do it :)). 
 
@@ -16,6 +16,9 @@ Possible solution: create another endpoint for getting all articles without api 
 5) No backend validation of data for creating new article
 
 6) User can not be linked with any picture as avatar
+
+7) No endpoint for related articles.
+
 # Global events
 It there is global event, you could emit global nux event, message must have title and message and could have error object as well. App will display snackbar at the bottom of the screen with error info.
 There are 3 types of this events:
