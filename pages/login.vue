@@ -1,7 +1,7 @@
 <template>
   <div class="login-page">
     <v-card max-width="400" class="pa-5 mx-auto mt-10">
-      <h1 class="text-h2 mb-3">Login</h1>
+      <h1 class="text-h2 mb-3 pb-5">Login</h1>
       <v-form onsubmit="return false" @submit="userLogin" ref="form">
         <v-select
           v-model="selectedUser"
