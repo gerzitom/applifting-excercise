@@ -2,7 +2,7 @@
   <div class="single-article">
     <template v-if="!error">
       <v-breadcrumbs :items="breadcrumbsItems" class="mt-1 pl-0" />
-      <h1 class="pb-2 mt-8 text-h1" data-test-id="heading">
+      <h1 class="pb-4 mt-8 text-sm-h1 text-h2" data-test-id="heading">
         <span v-if="!loading">{{ articleData.title }}</span>
         <v-skeleton-loader v-else type="heading" height="45" class="mt-9" />
       </h1>

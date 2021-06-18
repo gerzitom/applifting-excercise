@@ -5,11 +5,11 @@
   >
     <v-card class="my-4 py-6 px-3" :hover="true">
       <v-row>
-        <v-col cols="3">
+        <v-col cols="12" sm="3">
           <article-image :image-id="articleData.imageId"></article-image>
         </v-col>
-        <v-col cols="9">
-          <h2 class="text-h3">{{ articleData.title }}</h2>
+        <v-col cols="12" sm="9">
+          <h2 class="text-h3 pb-3">{{ articleData.title }}</h2>
           <v-row>
             <v-col cols="auto">
               <p class="text-caption">Tomáš Geržičák</p>
@@ -58,7 +58,7 @@ export default class ArticlePreview extends Vue {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .image-placeholder {
   //height: 150px;
   display: flex;
@@ -69,6 +69,9 @@ export default class ArticlePreview extends Vue {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    @media (max-width: 599px) {
+      max-height: 200px;
+    }
     &-placeholder {
       //width: 50%;
     }

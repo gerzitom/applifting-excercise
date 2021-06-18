@@ -1,17 +1,20 @@
 <template>
   <div class="app-bar-user">
     <div class="d-flex" v-if="loggedIn">
-      <v-btn text to="/admin/my-articles" id="my-articles-button">
-        My articles</v-btn
-      >
-      <v-btn
-        color="primary"
-        text
-        to="/admin/new-article"
-        id="new-article-button"
-      >
-        New article</v-btn
-      >
+      <div class="d-none d-sm-block">
+        <v-btn text to="/admin/my-articles" id="my-articles-button">
+          My articles</v-btn
+        >
+        <v-btn
+          color="primary"
+          text
+          to="/admin/new-article"
+          id="new-article-button"
+        >
+          New article</v-btn
+        >
+      </div>
+
       <div class="d-flex">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
@@ -28,6 +31,23 @@
             </v-btn>
           </template>
           <v-list>
+            <div class="d-block d-sm-none">
+              <v-list-item>
+                <v-btn text to="/admin/my-articles" id="my-articles-button">
+                  My articles</v-btn
+                >
+              </v-list-item>
+              <v-list-item>
+                <v-btn
+                  color="primary"
+                  text
+                  to="/admin/new-article"
+                  id="new-article-button"
+                >
+                  New article</v-btn
+                >
+              </v-list-item>
+            </div>
             <v-list-item>
               <v-btn text class="error" @click="logout">Log out</v-btn>
             </v-list-item>

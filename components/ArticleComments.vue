@@ -3,10 +3,10 @@
     <h3 class="text-h4 mb-7">Comments ({{ comments.length }})</h3>
     <div class="add-comment" v-if="$auth.loggedIn">
       <v-row align="center">
-        <v-col cols="1">
+        <v-col cols="2" sm="1">
           <user-avatar></user-avatar>
         </v-col>
-        <v-col>
+        <v-col cols="10" sm="11">
           <form
             onsubmit="return false"
             @submit="addComment"

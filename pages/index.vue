@@ -1,9 +1,9 @@
 <template>
   <main>
     <v-container>
-      <h1 class="text-h1 mb-4">Recent articles</h1>
+      <h1 class="text-sm-h1 mb-4 text-h2">Recent articles</h1>
       <v-row>
-        <v-col cols="10" data-test-id="articles-list">
+        <v-col cols="12" sm="10" data-test-id="articles-list">
           <article-preview
             v-for="article in articles"
             :key="article.articleId"
