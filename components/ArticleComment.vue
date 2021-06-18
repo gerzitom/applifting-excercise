@@ -18,7 +18,11 @@
               ><v-icon>mdi-chevron-up</v-icon></v-btn
             >
             <v-divider vertical class="mx-3" />
-            <v-btn icon @click="voteComment(VoteValue.DOWM)" :loading="loading"
+            <v-btn
+              icon
+              @click="voteComment(VoteValue.DOWM)"
+              :loading="loading"
+              data-jest-id="upvote_button"
               ><v-icon>mdi-chevron-down</v-icon></v-btn
             >
           </div>

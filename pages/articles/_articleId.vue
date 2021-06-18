@@ -2,7 +2,7 @@
   <div class="single-article">
     <template v-if="!error">
       <v-breadcrumbs :items="breadcrumbsItems" class="mt-1 pl-0" />
-      <h1 class="pb-2 mt-8 text-h1">
+      <h1 class="pb-2 mt-8 text-h1" data-test-id="heading">
         <span v-if="!loading">{{ articleData.title }}</span>
         <v-skeleton-loader v-else type="heading" height="45" class="mt-9" />
       </h1>
@@ -29,7 +29,7 @@
         height="350px"
         class="mb-6"
       />
-      <section class="text-body-1 pb-2">
+      <section class="text-body-1 pb-2" data-test-id="perex">
         <template v-if="!loading">
           {{ articleData.perex }}
         </template>
@@ -38,7 +38,11 @@
         </template>
       </section>
       <section class="mb-10 mt-5 text-body-2">
-        <div v-if="!loading" v-html="$md.render(articleData.content)"></div>
+        <div
+          v-if="!loading"
+          v-html="$md.render(articleData.content)"
+          data-test-id="content"
+        ></div>
         <template v-else>
           <v-skeleton-loader type="paragraph@4"></v-skeleton-loader>
         </template>

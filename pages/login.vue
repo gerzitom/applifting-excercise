@@ -16,6 +16,7 @@
           <v-text-field
             v-model="userId"
             label="User ID"
+            data-test-id="user-id"
             :disabled="loading"
             :error="tenantIdError.isError"
             :error-messages="tenantIdError.messages"
@@ -26,6 +27,7 @@
             label="Username"
             :disabled="loading"
             :rules="[usernameRequired]"
+            data-test-id="username"
           />
         </template>
         <v-text-field
@@ -38,6 +40,7 @@
           :error="passwordError.isError"
           :error-messages="passwordError.messages"
           :rules="[passwordRequired]"
+          data-test-id="password"
           @click:append="show = !show"
         ></v-text-field>
 
@@ -46,6 +49,7 @@
           width="100%"
           type="submit"
           :loading="loading"
+          data-test-id="login_button"
         >
           Login
         </v-btn>

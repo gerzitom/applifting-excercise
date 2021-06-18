@@ -15,8 +15,15 @@
             <v-text-field
               placeholder="Join the discusion"
               v-model="newComment"
+              data-test-id="comment_content"
             ></v-text-field>
-            <v-btn class="ml-5" :loading="loading" type="submit">Send</v-btn>
+            <v-btn
+              class="ml-5"
+              :loading="loading"
+              type="submit"
+              data-test-id="add_comment"
+              >Send</v-btn
+            >
           </form>
         </v-col>
       </v-row>
@@ -26,12 +33,14 @@
         If you want to add comment, <nuxt-link to="/login">log in</nuxt-link>.
       </p>
     </div>
-    <article-comment
-      v-for="comment in sortedComments"
-      :key="comment.commentId"
-      :comment="comment"
-      :article-id="articleId"
-    ></article-comment>
+    <div data-test-id="comments">
+      <article-comment
+        v-for="comment in sortedComments"
+        :key="comment.commentId"
+        :comment="comment"
+        :article-id="articleId"
+      ></article-comment>
+    </div>
   </section>
 </template>
 

@@ -3,7 +3,7 @@
     <v-container>
       <h1 class="text-h1 mb-4">Recent articles</h1>
       <v-row>
-        <v-col cols="10">
+        <v-col cols="10" data-test-id="articles-list">
           <article-preview
             v-for="article in articles"
             :key="article.articleId"
