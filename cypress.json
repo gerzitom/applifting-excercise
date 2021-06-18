@@ -1,0 +1,14 @@
+{
+  "baseUrl": "http://localhost:3000",
+  "fixturesFolder": "cypress/fixtures",
+  "integrationFolder": "cypress/integration",
+  "pluginsFile": "cypress/plugins/index.js",
+  "screenshotsFolder": "cypress/screenshots",
+  "supportFile": "cypress/support/index.js",
+  "videosFolder": "cypress/videos",
+  "env": {
+    "userId": "23a10b02-7fcd-460a-995f-936e95edadea",
+    "username": "gerzitom",
+    "password": "haha"
+  }
+}

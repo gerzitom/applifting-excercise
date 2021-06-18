@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import AppBarUser from '~/components/AppBarUser'
 import { describe } from '@jest/globals'
 import { mount } from '@vue/test-utils'
@@ -29,7 +33,6 @@ describe('App bar user', () => {
   })
 
   test('If user is logged in, display user name and articles buttons', () => {
-    console.log(mountOptions)
     mountOptions.mocks.$auth.loggedIn = true
     const wrapper = mount(AppBarUser, mountOptions)
     expect(wrapper.find('#my-articles-button').isVisible()).toBeTruthy()

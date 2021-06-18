@@ -5,6 +5,7 @@ module.exports = {
     '^vue$': 'vue/dist/vue.common.js',
   },
   moduleFileExtensions: ['ts', 'js', 'vue', 'json'],
+  modulePathIgnorePatterns: ['<rootDir>/cypress/'],
   transform: {
     '^.+\\.ts$': 'ts-jest',
     '^.+\\.js$': 'babel-jest',
@@ -15,6 +16,6 @@ module.exports = {
     '<rootDir>/components/**/*.vue',
     '<rootDir>/pages/**/*.vue',
   ],
-  setupFiles: ['<rootDir>/test/unit/index.js'],
+  setupFiles: ['<rootDir>/test/index.js'],
   preset: '@nuxt/test-utils',
 }
